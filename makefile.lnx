@@ -23,7 +23,7 @@ CC = gcc
 
 WFLAGS = -Wall -W -Werror
 
-OFLAGS = -mcpu=pentium -O2 -fomit-frame-pointer
+OFLAGS = -O2 -fomit-frame-pointer -funsigned-char
 
 CFLAGS = $(WFLAGS) $(OFLAGS)
 

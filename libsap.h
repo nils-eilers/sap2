@@ -41,11 +41,11 @@
 typedef unsigned int sapID;
 
 typedef struct {
-   unsigned char format;
-   unsigned char protection;
-   unsigned char track;
-   unsigned char sector;
-   unsigned char data[258];
+   char format;
+   char protection;
+   char track;
+   char sector;
+   char data[258];
 } sapsector_t;  /* type of a SAP sector */
 
 typedef struct {
@@ -58,7 +58,7 @@ typedef struct {
    int *block;
 } sapfileinfo_t;
 
-typedef int (*sapfilecb_t)(sapID id, const char filename[], int n, unsigned char trk20_data[]);
+typedef int (*sapfilecb_t)(sapID id, const char filename[], int n, char trk20_data[]);
 
 
 /* return values */
@@ -86,7 +86,7 @@ extern int sap_errno;
 
 
 /* low-level functions */
-extern int _ExtractDir(char buffer[], int buffer_size, int drive, int density, const unsigned char trk20_data[]);
+extern int _ExtractDir(char buffer[], int buffer_size, int drive, int density, const char trk20_data[]);
 extern int _ForEachFile(sapID id, const char pattern[], sapfilecb_t callback, int save_back);
 
 
@@ -99,9 +99,9 @@ extern sapID sap_CreateArchive(const char filename[], int format);
 extern int   sap_CloseArchive(sapID id);
 extern int   sap_FillArchive(sapID id, sapsector_t *sector);
 extern int   sap_ReadSector(sapID id, int track, int sect, sapsector_t *sector);
-extern int   sap_ReadSectorEx(sapID id, int track, int sect, int nsects, unsigned char data[]);
+extern int   sap_ReadSectorEx(sapID id, int track, int sect, int nsects, char data[]);
 extern int   sap_WriteSector(sapID id, int track, int sect, sapsector_t *sector);
-extern int   sap_WriteSectorEx(sapID id, int track, int sect, int nsects, const unsigned char data[]);
+extern int   sap_WriteSectorEx(sapID id, int track, int sect, int nsects, const char data[]);
 
 
 /* logical format API functions */
@@ -114,6 +114,15 @@ extern int   sap_AddFile(sapID id, const char filename[]);
 extern int   sap_DeleteFile(sapID id, const char pattern[]);
 extern int   sap_ExtractFile(sapID id, const char pattern[]);
 extern int   sap_GetFileInfo(sapID id, const char filename[], sapfileinfo_t *info);
+
+
+/* Ensure a char holds only positive values */
+#if (CHAR_MIN < 0)
+#define abs_char(c) ((c < 0) ? (c + CHAR_MAX + 1) : c)
+#else
+#define abs_char(c) c
+#endif
+
 
 #endif
 

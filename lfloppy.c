@@ -148,7 +148,7 @@ static int ExecCommand(int drive, int density, struct floppy_raw_cmd *fd_cmd)
 /* FloppyReadSector:
  *  Lit le secteur spécifié sur la disquette.
  */
-int FloppyReadSector(int drive, int density, int track, int sector, int nsects, unsigned char data[])
+int FloppyReadSector(int drive, int density, int track, int sector, int nsects, char data[])
 {
    struct floppy_raw_cmd fd_cmd;
    int pc_drive = drive/2;
@@ -184,14 +184,14 @@ int FloppyReadSector(int drive, int density, int track, int sector, int nsects, 
 /* FloppyWriteSector:
  *  Ecrit le secteur spécifié sur la disquette.
  */
-int FloppyWriteSector(int drive, int density, int track, int sector, int nsects, const unsigned char data[])
+int FloppyWriteSector(int drive, int density, int track, int sector, int nsects, const char data[])
 {
    struct floppy_raw_cmd fd_cmd;
    int pc_drive = drive/2;
 
    /* paramètres de commande */
    fd_cmd.flags  = FD_RAW_WRITE | FD_RAW_INTR | FD_RAW_NEED_SEEK;
-   fd_cmd.data   = (unsigned char *)data;
+   fd_cmd.data   = (char *) data;
    fd_cmd.length = (density == 1 ? 128 : 256)*nsects;  /* buffer length */
    fd_cmd.rate   = IS_5_INCHES(pc_drive) ? 1 : 2;
    fd_cmd.track  = IS_5_INCHES(pc_drive) ? track*2 : track;  /* physical cylinder */
@@ -220,14 +220,14 @@ int FloppyWriteSector(int drive, int density, int track, int sector, int nsects,
 /* FloppyFormatTrack:
  *  Formate la piste en utilisant la table des headers spécifiée.
  */
-int FloppyFormatTrack(int drive, int density, int track, const unsigned char header_table[])
+int FloppyFormatTrack(int drive, int density, int track, char header_table[])
 {
    struct floppy_raw_cmd fd_cmd;
    int pc_drive = drive/2;
 
    /* paramètres de commande */
    fd_cmd.flags  = FD_RAW_WRITE | FD_RAW_INTR | FD_RAW_NEED_SEEK;
-   fd_cmd.data   = (unsigned char *)header_table;
+   fd_cmd.data   = header_table;
    fd_cmd.length = 64;
    fd_cmd.rate   = IS_5_INCHES(pc_drive) ? 1 : 2;
    fd_cmd.track  = IS_5_INCHES(pc_drive) ? track*2 : track;  /* physical cylinder */

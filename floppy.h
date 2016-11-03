@@ -39,9 +39,9 @@ struct floppy_info {
 extern int FloppyInit(struct floppy_info *fi, int enable_write_support);
 extern void FloppyExit(void);
 
-extern int FloppyReadSector(int drive, int density, int track, int sector, int nsects, unsigned char data[]);
-extern int FloppyWriteSector(int drive, int density, int track, int sector, int nsects, const unsigned char data[]);
-extern int FloppyFormatTrack(int drive, int density, int track, const unsigned char header_table[]);
+extern int FloppyReadSector(int drive, int density, int track, int sector, int nsects, char data[]);
+extern int FloppyWriteSector(int drive, int density, int track, int sector, int nsects, const char data[]);
+extern int FloppyFormatTrack(int drive, int density, int track, char header_table[]);
 
 #endif
 

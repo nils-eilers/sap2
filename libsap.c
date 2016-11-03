@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <limits.h>
 #include "libsap.h"
 
 
@@ -167,8 +168,8 @@ static char dtype_sym[3] = { 'B', 'A', '*' };
 
 struct extension_t {
    char tag[TO_EXT_LENGTH+1];
-   unsigned char ftype;
-   unsigned char dtype;
+   char ftype;
+   char dtype;
 };
 
 enum {
@@ -232,10 +233,12 @@ static int get_id(void)
 /* clean_string:
  *  Helper function to clean up character strings.
  */
-static inline void clean_string(unsigned char *str)
+static inline void clean_string(char *str)
 {
+   char c;
    while (*str) {
-      if ((*str<32) || (*str>127))
+      c = abs_char(*str);
+      if ((c < 32) || (c > 127))
          *str = '#';
 
       str++;
@@ -292,7 +295,7 @@ static void do_crc(sapsector_t *sapsector, int format)
  */
 static void do_read_sector(sapID id, sapsector_t *sapsector)
 {
-   unsigned char buffer[sizeof(sapsector_t)];
+   char buffer[sizeof(sapsector_t)];
    int format = ID_FORMAT(id);
    int i;
 
@@ -317,7 +320,7 @@ static void do_read_sector(sapID id, sapsector_t *sapsector)
  */
 static void do_write_sector(sapID id, sapsector_t *sapsector)
 {
-   unsigned char buffer[sizeof(sapsector_t)];
+   char buffer[sizeof(sapsector_t)];
    int format = ID_FORMAT(id);
    int i;
 
@@ -363,9 +366,9 @@ static void seek_pos(sapID id, int track, int sect)
 /* get_file_size:
  *  Returns the size in blocks of the specified file on disk.
  */
-static int get_file_size(int format, int n, const unsigned char trk20_data[])
+static int get_file_size(int format, int n, const char trk20_data[])
 {
-   const unsigned char *fat_data, *entry_data;
+   const char *fat_data, *entry_data;
    int block, size = 0;
 
    fat_data = trk20_data + TO_FAT_START(format);
@@ -386,15 +389,15 @@ static int get_file_size(int format, int n, const unsigned char trk20_data[])
 /* get_dskf:
  *  Returns the amount of free space in blocks on disk.
  */
-static int get_dskf(int format, const unsigned char trk20_data[])
+static int get_dskf(int format, const char trk20_data[])
 {
-   const unsigned char *fat_data;
+   const char *fat_data;
    int i, dskf = 0;
 
    fat_data = trk20_data + TO_FAT_START(format);
 
    for (i=0; i<TO_NBLOCKS(format); i++) {
-      if (fat_data[i] == TO_TAG_FREE)
+      if (abs_char(fat_data[i]) == TO_TAG_FREE)
          dskf++;
    }
 
@@ -406,18 +409,18 @@ static int get_dskf(int format, const unsigned char trk20_data[])
 /* extract_dir_entry:
  *  Extracts one dir entry and returns the number of characters.
  */
-static int extract_dir_entry(int format, char buffer[], int buffer_size, int n, const unsigned char trk20_data[])
+static int extract_dir_entry(int format, char buffer[], int buffer_size, int n, const char trk20_data[])
 {
-   const unsigned char *entry_data;
+   const char *entry_data;
    char name[TO_NAME_LENGTH+1], ext[TO_EXT_LENGTH+1], date[9], *comment;
-   unsigned char ftype, dtype;
+   char ftype, dtype;
    int i, len, size;
 
    entry_data = trk20_data + TO_DIR_START(format) + n*TO_DIRENTRY_LENGTH;
 
    comment = malloc(TO_COMMENT_LENGTH+1);
 
-   if ((entry_data[TO_NAME] == 0) || (entry_data[TO_NAME] == TO_TAG_FREE))
+   if ((entry_data[TO_NAME] == 0) || (abs_char(entry_data[TO_NAME]) == TO_TAG_FREE))
       return 0;
 
    if (entry_data[TO_NAME] == 1) {
@@ -454,11 +457,11 @@ static int extract_dir_entry(int format, char buffer[], int buffer_size, int n, 
 
    /* file type */
    ftype = entry_data[TO_FILE_TYPE];
-   ftype = (ftype > 3 ? ftype_sym[4] : ftype_sym[ftype]);
+   ftype = (ftype > 3 ? ftype_sym[4] : ftype_sym[(int) abs_char(ftype)]);
 
    /* data type */
    dtype = entry_data[TO_DATA_TYPE];
-   dtype = (dtype == 0 ? dtype_sym[0] : (dtype == 0xFF ? dtype_sym[1] : dtype_sym[2]));
+   dtype = (dtype == 0 ? dtype_sym[0] : (abs_char(dtype) == 0xFF ? dtype_sym[1] : dtype_sym[2]));
 
    /* size */
    size = get_file_size(format, n, trk20_data) * ((TO_BLOCKSIZE(format) + 1024) / 1024);
@@ -490,11 +493,11 @@ static int extract_dir_entry(int format, char buffer[], int buffer_size, int n, 
 /* get_filename:
  *  Detects whether the file entry is valid and returns the filename if so.
  */
-static int get_filename(char filename[], const unsigned char entry_data[])
+static int get_filename(char filename[], const char entry_data[])
 {
    int i, j;
 
-   if ((entry_data[TO_NAME] == 0) || (entry_data[TO_NAME] == TO_TAG_FREE))
+   if ((entry_data[TO_NAME] == 0) || (abs_char(entry_data[TO_NAME]) == TO_TAG_FREE))
       return -1;
 
    /* name */
@@ -529,7 +532,7 @@ static int get_filename(char filename[], const unsigned char entry_data[])
 /* decode_filename:
  *  Decodes the specified raw filename into a valid dir entry.
  */
-static void decode_filename(unsigned char entry_data[], const char filename[], int file_size)
+static void decode_filename(char entry_data[], const char filename[], int file_size)
 {
    const char *p;
    char shortname[128];
@@ -618,7 +621,7 @@ static void decode_filename(unsigned char entry_data[], const char filename[], i
 /* seek_file:
  *  Seeks a file in the specified directory and returns its index number if found.
  */
-static int seek_file(int format, const char filename[], const unsigned char dir_data[])
+static int seek_file(int format, const char filename[], const char dir_data[])
 {
    char entry_name[TO_NAME_LENGTH + 1 + TO_EXT_LENGTH + 1];
    int i;
@@ -761,7 +764,7 @@ static int wcdcmp(const char *s1, const char *s2)
 /* seek_wilcard:
  *  Seeks a wildcard in the specified directory and returns its index number if found.
  */
-static int seek_wildcard(int format, char filename[], const char pattern[], const unsigned char dir_data[])
+static int seek_wildcard(int format, char filename[], const char pattern[], const char dir_data[])
 {
    char entry_name[TO_NAME_LENGTH + 1 + TO_EXT_LENGTH + 1];
    static int i = 0;
@@ -789,17 +792,17 @@ static int seek_wildcard(int format, char filename[], const char pattern[], cons
 /* find_free_block_sym:
  *  Finds a free block using a symmetrical search.
  */
-static int find_free_block_sym(int format, unsigned char fat_data[])
+static int find_free_block_sym(int format, char fat_data[])
 {
    int block;
 
    block = TO_NBLOCKS(format)/2 - 1;
 
    while (block < TO_NBLOCKS(format)) {
-      if (fat_data[block] == TO_TAG_FREE)
+      if (abs_char(fat_data[block]) == TO_TAG_FREE)
          return block;
 
-      if (fat_data[TO_NBLOCKS(format) - block - 2] == TO_TAG_FREE)  /* fat_data[-1] is always 0 */
+      if (abs_char(fat_data[TO_NBLOCKS(format) - block - 2]) == TO_TAG_FREE)  /* fat_data[-1] is always 0 */
          return TO_NBLOCKS(format) - block - 2;
 
       block++;
@@ -813,11 +816,11 @@ static int find_free_block_sym(int format, unsigned char fat_data[])
 /* find_free_block_rel:
  *  Finds a free block using a relative search.
  */
-static int find_free_block_rel(int format, int block, unsigned char fat_data[])
+static int find_free_block_rel(int format, int block, char fat_data[])
 {
    if (block < TO_NBLOCKS(format)/2) {
       while (block >= 0) {
-         if (fat_data[block] == TO_TAG_FREE)
+         if (abs_char(fat_data[block]) == TO_TAG_FREE)
             break;
 
          block--;
@@ -825,7 +828,7 @@ static int find_free_block_rel(int format, int block, unsigned char fat_data[])
    }
    else {
       while (block < TO_NBLOCKS(format)) {
-         if (fat_data[block] == TO_TAG_FREE)
+         if (abs_char(fat_data[block]) == TO_TAG_FREE)
             break;
 
          block++;
@@ -843,10 +846,10 @@ static int find_free_block_rel(int format, int block, unsigned char fat_data[])
 /* do_add_file:
  *  Performs the low-level add operation for the specified file entry.
  */
-static void do_add_file(sapID id, FILE *file, int file_size, unsigned char entry_data[], int n, unsigned char trk20_data[])
+static void do_add_file(sapID id, FILE *file, int file_size, char entry_data[], int n, char trk20_data[])
 {
    sapsector_t sapsector;
-   unsigned char *fat_data;
+   char *fat_data;
    unsigned int block, next_block;
    int sect;
 
@@ -913,9 +916,9 @@ static void do_add_file(sapID id, FILE *file, int file_size, unsigned char entry
  *  Performs the low-level delete operation for the specified file entry and
  *  returns the size of file.
  */
-static int do_delete_file(sapID id, const char filename[], int n, unsigned char trk20_data[])
+static int do_delete_file(sapID id, const char filename[], int n, char trk20_data[])
 {
-   unsigned char *fat_data, *entry_data;
+   char *fat_data, *entry_data;
    int block, old_block, size = 0;
 
    (void) filename;
@@ -953,10 +956,10 @@ static int do_delete_file(sapID id, const char filename[], int n, unsigned char 
  *  Performs the low-level extract operation for the specified file entry and
  *  returns the size of file.
  */
-static int do_extract_file(sapID id, const char filename[], int n, unsigned char trk20_data[])
+static int do_extract_file(sapID id, const char filename[], int n, char trk20_data[])
 {
    sapsector_t sapsector;
-   unsigned char *fat_data, *entry_data;
+   char *fat_data, *entry_data;
    int sect, end_size, size = 0;
    unsigned int block;
    FILE *file;
@@ -1017,16 +1020,16 @@ static int do_extract_file(sapID id, const char filename[], int n, unsigned char
 /* _ExtractDir:
  *  Extract the directory from track 20 and returns the number of lines.
  */
-int _ExtractDir(char buffer[], int buffer_size, int drive, int density, const unsigned char trk20_data[])
+int _ExtractDir(char buffer[], int buffer_size, int drive, int density, const char trk20_data[])
 {
-   unsigned char disk_name[TO_NAME_LENGTH+1];
+   char disk_name[TO_NAME_LENGTH+1];
    int dskf, i, len, pos, lines = 0;
    int format = (density == 1 ? SAP_FORMAT2 : SAP_FORMAT1);
 
    /* name of the volume */
    strncpy(disk_name, trk20_data, TO_NAME_LENGTH);
 
-   if ((disk_name[0] == 0) || (disk_name[0] == TO_TAG_FREE)) {
+   if ((disk_name[0] == 0) || (abs_char(disk_name[0]) == TO_TAG_FREE)) {
       strcpy(disk_name, "No Name ");
    }
    else {
@@ -1062,7 +1065,7 @@ int _ExtractDir(char buffer[], int buffer_size, int drive, int density, const un
 int _ForEachFile(sapID id, const char pattern[], sapfilecb_t callback, int save_back)
 {
    char filename[TO_NAME_LENGTH + 1 + TO_EXT_LENGTH + 1];
-   unsigned char trk20_data[SAP_TRACKSIZE1], *dir_data;
+   char trk20_data[SAP_TRACKSIZE1], *dir_data;
    int n, ret = 0;
 
    switch (ID_STATE(id)) {
@@ -1350,7 +1353,7 @@ int sap_ReadSector(sapID id, int track, int sect, sapsector_t *sapsector)
  *  Reads one or more sectors from the same track,
  *  returns SAP_OK on success or SAP_ERROR on error.
  */
-int sap_ReadSectorEx(sapID id, int track, int sect, int nsects, unsigned char data[])
+int sap_ReadSectorEx(sapID id, int track, int sect, int nsects, char data[])
 {
    sapsector_t sapsector;
    int format = ID_FORMAT(id);
@@ -1422,7 +1425,7 @@ int sap_WriteSector(sapID id, int track, int sect, sapsector_t *sapsector)
  *  Writes one or more sectors into the same track,
  *  returns SAP_OK on success or SAP_ERROR on error.
  */
-int sap_WriteSectorEx(sapID id, int track, int sect, int nsects, const unsigned char data[])
+int sap_WriteSectorEx(sapID id, int track, int sect, int nsects, const char data[])
 {
    sapsector_t sapsector;
    int format = ID_FORMAT(id);
@@ -1558,7 +1561,7 @@ int sap_FormatArchive(sapID id, int capacity)
  */
 int sap_ListArchive(sapID id, char buffer[], int buffer_size)
 {
-   unsigned char trk20_data[SAP_TRACKSIZE1];
+   char trk20_data[SAP_TRACKSIZE1];
 
    switch (ID_STATE(id)) {
 
@@ -1592,8 +1595,8 @@ int sap_ListArchive(sapID id, char buffer[], int buffer_size)
  */
 int sap_AddFile(sapID id, const char filename[])
 {
-   unsigned char entry_data[TO_DIRENTRY_LENGTH];
-   unsigned char trk20_data[SAP_TRACKSIZE1], *fat_data, *dir_data;
+   char entry_data[TO_DIRENTRY_LENGTH];
+   char trk20_data[SAP_TRACKSIZE1], *dir_data;
    int free_n=-1, prev_n=-1;
    int i, dskf, file_size = 0;
    FILE *file;
@@ -1640,12 +1643,11 @@ int sap_AddFile(sapID id, const char filename[])
    /* read track 20 */
    sap_ReadSectorEx(id, 20, 1, SAP_NSECTS, trk20_data);
 
-   fat_data = trk20_data + TO_FAT_START(ID_FORMAT(id));
    dir_data = trk20_data + TO_DIR_START(ID_FORMAT(id));
 
    /* simultaneously seek already free entry and previous entry */
    for (i=0; i<TO_NDIRENTRIES(ID_FORMAT(id)); i++) {
-      if ((dir_data[i*TO_DIRENTRY_LENGTH] == 0) || (dir_data[i*TO_DIRENTRY_LENGTH] == TO_TAG_FREE)) {
+      if ((dir_data[i*TO_DIRENTRY_LENGTH] == 0) || (abs_char(dir_data[i*TO_DIRENTRY_LENGTH]) == TO_TAG_FREE)) {
          if (free_n<0)
             free_n = i;
       }
@@ -1722,7 +1724,7 @@ int sap_ExtractFile(sapID id, const char pattern[])
  */
 int sap_GetFileInfo(sapID id, const char filename[], sapfileinfo_t *info)
 {
-   unsigned char trk20_data[SAP_TRACKSIZE1], *dir_data, *fat_data, *entry_data;
+   char trk20_data[SAP_TRACKSIZE1], *dir_data, *fat_data, *entry_data;
    struct tm tim;
    int n, block, i=0;
 

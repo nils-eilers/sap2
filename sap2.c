@@ -114,7 +114,7 @@ static void term_puts(const char buffer[], int lines, int page_height)
  */
 static int ViewDiskDir(int drive, int density, int page_height)
 {
-   unsigned char data[512*SAP_NSECTS];
+   char data[512*SAP_NSECTS];
    char buffer[4096];
    int lines;
 
@@ -215,8 +215,8 @@ static int FormatDisk(int drive, int density, int factor, int verbose)
    int num_tracks, sect_size;
    int track, sect, pos, i;
    int sector_map[SAP_NSECTS];
-   unsigned char header_table[512];
-   unsigned char buffer[512*SAP_NSECTS];
+   char header_table[512];
+   char buffer[512*SAP_NSECTS];
 
    /* détermination du nombre de pistes */
    if (IS_5_INCHES(drive))
@@ -288,12 +288,12 @@ static int FormatDisk(int drive, int density, int factor, int verbose)
 /* shrink_fat_160_to_80:
  *  Réduit la taille de la FAT de 160 à 80 blocks.
  */
-static void shrink_fat_160_to_80(unsigned char fat_data[])
+static void shrink_fat_160_to_80(char fat_data[])
 {
    int i;
 
    for (i=0; i<SAP_NTRACKS1; i++) {
-      if (fat_data[1 + SAP_NTRACKS1 + i] != 0xFF)
+      if (abs_char(fat_data[1 + SAP_NTRACKS1 + i]) != 0xFF)
          return;
    }
 
@@ -311,7 +311,7 @@ static int PackArchive(const char sap_name[], int drive, int density, int verbos
    int track, sect;
    sapID sap_file;
    sapsector_t sapsector;
-   unsigned char buffer[512*SAP_NSECTS];
+   char buffer[512*SAP_NSECTS];
 
    if ((sap_file=sap_CreateArchive(sap_name, density == 1 ? SAP_FORMAT2 : SAP_FORMAT1)) == SAP_ERROR)
       return 1;
@@ -400,7 +400,7 @@ static int UnpackArchive(const char sap_name[], int drive, int density, int verb
    int track, sect;
    sapID sap_file;
    sapsector_t sapsector;
-   unsigned char buffer[512*SAP_NSECTS];
+   char buffer[512*SAP_NSECTS];
 
    if ((sap_file=sap_OpenArchive(sap_name, &format)) == SAP_ERROR)
       return 1;
