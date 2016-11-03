@@ -1,5 +1,5 @@
 /*  SAPfs
- *  Version 0.9.4
+ *  Version 0.9.6
  *  Copyright (C) 2001-2003 Eric Botcazou
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,8 @@
 #include "libsap.h"
 
 
-#define SAPFS_VERSION_STR "0.9.4"
+
+#define SAPFS_VERSION_STR "0.9.6"
 
 #ifdef linux
    #define SAPFS_PLATFORM_STR "Linux"

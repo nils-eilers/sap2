@@ -1,5 +1,5 @@
 /*  SAP2
- *  Version 2.1
+ *  Version 2.2
  *  Copyright (C) 2000-2003 Eric Botcazou
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,7 @@
  *          1.2: ajout d'un mode de fonctionnement batch
  *          2.0: support des disquettes 5"25 et de deux lecteurs PC
  *          2.1: support de la simple densité
+ *          2.2: support de plusieurs langues
  */
 
 
@@ -33,7 +34,7 @@
 #include "floppy.h"
 
 
-#define SAP2_VERSION_STR "2.0.93"
+#define SAP2_VERSION_STR "2.0.96"
 
 #ifdef linux
    #define SAP2_PLATFORM_STR "Linux"
