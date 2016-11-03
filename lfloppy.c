@@ -44,7 +44,7 @@ static int drive_type[2];
 
 
 /* ResetDrive:
- *  Réinitialise le lecteur de disquettes.
+ *  RÃ©initialise le lecteur de disquettes.
  */
 static void ResetDrive(int drive, int density)
 {
@@ -93,14 +93,14 @@ static int OpenDrive(int drive, int density)
 
 
 /* ExecCommand:
- *  Exécute la commande spécifiée via l'appel ioctl() FDRAWCMD.
+ *  ExÃ©cute la commande spÃ©cifiÃ©e via l'appel ioctl() FDRAWCMD.
  */
 static int ExecCommand(int drive, int density, struct floppy_raw_cmd *fd_cmd)
 {
    int i, ret = 0;
 
    if (fd[drive]<0 && !OpenDrive(drive, density))
-      return 0x10;  /* lecteur non prêt */
+      return 0x10;  /* lecteur non prÃªt */
 
    for (i=0; i<DISK_RETRY; i++) {
       ret=ioctl(fd[drive], FDRAWCMD, fd_cmd);
@@ -112,7 +112,7 @@ static int ExecCommand(int drive, int density, struct floppy_raw_cmd *fd_cmd)
    }
 
    if (ret<0)
-      return 0x10;  /* lecteur non prêt */
+      return 0x10;  /* lecteur non prÃªt */
 
 #ifdef DEBUG
    printf("fd_cmd reply: ");
@@ -127,14 +127,14 @@ static int ExecCommand(int drive, int density, struct floppy_raw_cmd *fd_cmd)
          return 0x04;   /* erreur sur l'adresse */
 
       case 0x02:  /* Write Protected */
-         return 0x01;   /* disk protégé en écriture */
+         return 0x01;   /* disk protÃ©gÃ© en Ã©criture */
 
       case 0x04:  /* No Data - unreadable */
-         return 0x08;   /* erreur sur les données */
+         return 0x08;   /* erreur sur les donnÃ©es */
 
       case 0x20:  /* CRC error in data or addr */
          if (fd_cmd->reply[2]==0x20)
-            return 0x08;   /* erreur sur les données */
+            return 0x08;   /* erreur sur les donnÃ©es */
          else
             return 0x04;   /* erreur sur l'adresse */
 
@@ -146,14 +146,14 @@ static int ExecCommand(int drive, int density, struct floppy_raw_cmd *fd_cmd)
 
 
 /* FloppyReadSector:
- *  Lit le secteur spécifié sur la disquette.
+ *  Lit le secteur spÃ©cifiÃ© sur la disquette.
  */
 int FloppyReadSector(int drive, int density, int track, int sector, int nsects, unsigned char data[])
 {
    struct floppy_raw_cmd fd_cmd;
    int pc_drive = drive/2;
 
-   /* paramètres de commande */
+   /* paramÃ¨tres de commande */
    fd_cmd.flags  = FD_RAW_READ | FD_RAW_INTR | FD_RAW_NEED_SEEK;
    fd_cmd.data   = data;
    fd_cmd.length = (density == 1 ? 128 : 256)*nsects;  /* buffer length */
@@ -182,14 +182,14 @@ int FloppyReadSector(int drive, int density, int track, int sector, int nsects, 
 
 
 /* FloppyWriteSector:
- *  Ecrit le secteur spécifié sur la disquette.
+ *  Ecrit le secteur spÃ©cifiÃ© sur la disquette.
  */
 int FloppyWriteSector(int drive, int density, int track, int sector, int nsects, const unsigned char data[])
 {
    struct floppy_raw_cmd fd_cmd;
    int pc_drive = drive/2;
 
-   /* paramètres de commande */
+   /* paramÃ¨tres de commande */
    fd_cmd.flags  = FD_RAW_WRITE | FD_RAW_INTR | FD_RAW_NEED_SEEK;
    fd_cmd.data   = (unsigned char *)data;
    fd_cmd.length = (density == 1 ? 128 : 256)*nsects;  /* buffer length */
@@ -218,14 +218,14 @@ int FloppyWriteSector(int drive, int density, int track, int sector, int nsects,
 
 
 /* FloppyFormatTrack:
- *  Formate la piste en utilisant la table des headers spécifiée.
+ *  Formate la piste en utilisant la table des headers spÃ©cifiÃ©e.
  */
 int FloppyFormatTrack(int drive, int density, int track, const unsigned char header_table[])
 {
    struct floppy_raw_cmd fd_cmd;
    int pc_drive = drive/2;
 
-   /* paramètres de commande */
+   /* paramÃ¨tres de commande */
    fd_cmd.flags  = FD_RAW_WRITE | FD_RAW_INTR | FD_RAW_NEED_SEEK;
    fd_cmd.data   = (unsigned char *)header_table;
    fd_cmd.length = 64;

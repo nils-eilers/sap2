@@ -18,10 +18,10 @@
  */
 
 /*  version 1.0: programme fonctionnel sous MSDOS et Linux
- *          1.1: retour au format PC à la sortie du programme
+ *          1.1: retour au format PC Ã  la sortie du programme
  *          1.2: ajout d'un mode de fonctionnement batch
  *          2.0: support des disquettes 5"25 et de deux lecteurs PC
- *          2.1: support de la simple densité
+ *          2.1: support de la simple densitÃ©
  */
 
 
@@ -46,19 +46,19 @@
 
 /* horrible hack pour supporter les accents... */
 #ifdef linux
-static char eacute[] = "é";
-static char egrave[] = "è";
-static char agrave[] = "à";
-static char ugrave[] = "ù";
+static char eacute[] = "Ã©";
+static char egrave[] = "Ã¨";
+static char agrave[] = "Ã ";
+static char ugrave[] = "Ã¹";
 #else
-static char eacute[] = "‚";
-static char egrave[] = "Š";
-static char agrave[] = "…";
-static char ugrave[] = "—";
+static char eacute[] = "Â‚";
+static char egrave[] = "ÂŠ";
+static char agrave[] = "Â…";
+static char ugrave[] = "Â—";
 #endif
 
 
-/* pour l'affichage du répertoire */
+/* pour l'affichage du rÃ©pertoire */
 #define PAGE_HEIGHT 22
 
 
@@ -76,7 +76,7 @@ static char *drive_type_name[7] = { "non disponible",
 
 
 /* term_puts:
- *  Affiche une chaîne de caractères en respectant la taille du terminal.
+ *  Affiche une chaÃ®ne de caractÃ¨res en respectant la taille du terminal.
  */
 static void term_puts(const char buffer[], int lines, int page_height)
 {
@@ -110,7 +110,7 @@ static void term_puts(const char buffer[], int lines, int page_height)
 
 
 /* ViewDiskDir:
- *  Affiche le répertoire d'une disquette TO.
+ *  Affiche le rÃ©pertoire d'une disquette TO.
  */
 static int ViewDiskDir(int drive, int density, int page_height)
 {
@@ -121,7 +121,7 @@ static int ViewDiskDir(int drive, int density, int page_height)
    if (FloppyReadSector(drive, density, 20, 1, SAP_NSECTS, data) != 0)
       return 1;
 
-   /* on réduit la FAT à 80 blocks pour les disquettes 5"25 DD */
+   /* on rÃ©duit la FAT Ã  80 blocks pour les disquettes 5"25 DD */
    if (IS_5_INCHES(drive) && density == 2)
       memset(data + SAP_SECTSIZE1 + 1 + SAP_NTRACKS1, 0xFE, SAP_NTRACKS1);
 
@@ -139,7 +139,7 @@ static int ViewDiskDir(int drive, int density, int page_height)
 
 
 /* ViewArchiveDir:
- *  Affiche le répertoire d'une archive SAP.
+ *  Affiche le rÃ©pertoire d'une archive SAP.
  */
 static int ViewArchiveDir(const char sap_name[], int page_height)
 {
@@ -167,7 +167,7 @@ static int ViewArchiveDir(const char sap_name[], int page_height)
 
 
 /* CreateEmptyArchive:
- *  Crée une archive SAP vide (mais formatée).
+ *  CrÃ©e une archive SAP vide (mais formatÃ©e).
  */
 static int CreateEmptyArchive(const char sap_name[], int format, int capacity)
 {
@@ -192,7 +192,7 @@ static void BuildSectorMap(int *sector_map, int factor)
 {
    int sect, loc=0;
 
-   /* mise à zéro de la table */
+   /* mise Ã  zÃ©ro de la table */
    memset(sector_map, 0, sizeof(int)*SAP_NSECTS);
 
    for (sect=1; sect<=SAP_NSECTS; sect++) {
@@ -218,7 +218,7 @@ static int FormatDisk(int drive, int density, int factor, int verbose)
    unsigned char header_table[512];
    unsigned char buffer[512*SAP_NSECTS];
 
-   /* détermination du nombre de pistes */
+   /* dÃ©termination du nombre de pistes */
    if (IS_5_INCHES(drive))
       num_tracks = SAP_NTRACKS2;
    else
@@ -231,7 +231,7 @@ static int FormatDisk(int drive, int density, int factor, int verbose)
       sect_size = SAP_SECTSIZE1;
 
    /* construction de la carte des secteurs pour chaque piste,
-      à partir du facteur d'entrelacement */
+      Ã  partir du facteur d'entrelacement */
    BuildSectorMap(sector_map, factor);
 
    /* formatage des pistes */
@@ -286,7 +286,7 @@ static int FormatDisk(int drive, int density, int factor, int verbose)
 
 
 /* shrink_fat_160_to_80:
- *  Réduit la taille de la FAT de 160 à 80 blocks.
+ *  RÃ©duit la taille de la FAT de 160 Ã  80 blocks.
  */
 static void shrink_fat_160_to_80(unsigned char fat_data[])
 {
@@ -303,7 +303,7 @@ static void shrink_fat_160_to_80(unsigned char fat_data[])
 
 
 /* PackArchive:
- *  Transfère le contenu d'une disquette TO dans une archive SAP.
+ *  TransfÃ¨re le contenu d'une disquette TO dans une archive SAP.
  */
 static int PackArchive(const char sap_name[], int drive, int density, int verbose)
 {
@@ -316,7 +316,7 @@ static int PackArchive(const char sap_name[], int drive, int density, int verbos
    if ((sap_file=sap_CreateArchive(sap_name, density == 1 ? SAP_FORMAT2 : SAP_FORMAT1)) == SAP_ERROR)
       return 1;
 
-   /* détermination du nombre de pistes */
+   /* dÃ©termination du nombre de pistes */
    if (IS_5_INCHES(drive))
       num_tracks = SAP_NTRACKS2;
    else
@@ -354,7 +354,7 @@ static int PackArchive(const char sap_name[], int drive, int density, int verbos
                memcpy(sapsector.data, buffer, sect_size);
             }
 
-            /* traitement spécial de la FAT pour les disquettes 5"25 DD */
+            /* traitement spÃ©cial de la FAT pour les disquettes 5"25 DD */
             if ((track == 20) && (sect == 2) && IS_5_INCHES(drive) && (density == 2))
                shrink_fat_160_to_80(sapsector.data);
 
@@ -373,7 +373,7 @@ static int PackArchive(const char sap_name[], int drive, int density, int verbos
 
             memcpy(sapsector.data, buffer+(sect-1)*sect_size, sect_size);
 
-            /* traitement spécial de la FAT pour les disquettes 5"25 DD */
+            /* traitement spÃ©cial de la FAT pour les disquettes 5"25 DD */
             if ((track == 20) && (sect == 2) && IS_5_INCHES(drive) && (density == 2))
                shrink_fat_160_to_80(sapsector.data);
 
@@ -392,7 +392,7 @@ static int PackArchive(const char sap_name[], int drive, int density, int verbos
 
 
 /* UnpackArchive:
- *  Transfère le contenu d'une archive SAP vers une disquette TO.
+ *  TransfÃ¨re le contenu d'une archive SAP vers une disquette TO.
  */
 static int UnpackArchive(const char sap_name[], int drive, int density, int verbose)
 {
@@ -405,11 +405,11 @@ static int UnpackArchive(const char sap_name[], int drive, int density, int verb
    if ((sap_file=sap_OpenArchive(sap_name, &format)) == SAP_ERROR)
       return 1;
 
-   /* vérification du format */
+   /* vÃ©rification du format */
    if (((format == SAP_FORMAT1) && (density != 2)) || ((format == SAP_FORMAT2) && (density != 1)))
       return 1;
 
-   /* détermination du nombre de pistes */
+   /* dÃ©termination du nombre de pistes */
    if (IS_5_INCHES(drive))
       num_tracks = SAP_NTRACKS2;
    else
@@ -461,7 +461,7 @@ static int UnpackArchive(const char sap_name[], int drive, int density, int verb
 
 
 /* get_drive:
- *  Helper pour obtenir le numéro de lecteur.
+ *  Helper pour obtenir le numÃ©ro de lecteur.
  */
 static void get_drive(int *drive, int *density)
 {
@@ -497,7 +497,7 @@ static void get_drive(int *drive, int *density)
 
 
 /* interactive_main:
- *  Point d'entrée du programme interactif.
+ *  Point d'entrÃ©e du programme interactif.
  */
 static void interactive_main(void)
 {
@@ -689,7 +689,7 @@ static void usage(const char prog_name[])
 
 
 /* main:
- *  Point d'entrée du programme.
+ *  Point d'entrÃ©e du programme.
  */
 int main(int argc, char *argv[])
 {

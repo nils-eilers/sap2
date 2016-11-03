@@ -40,15 +40,15 @@
 
 /* ugly hack to support French accents */
 #ifdef linux
-static char eacute[] = "é";
-static char egrave[] = "è";
-static char agrave[] = "à";
-static char ugrave[] = "ù";
+static char eacute[] = "Ã©";
+static char egrave[] = "Ã¨";
+static char agrave[] = "Ã ";
+static char ugrave[] = "Ã¹";
 #else
-static char eacute[] = "‚";
-static char egrave[] = "Š";
-static char agrave[] = "…";
-static char ugrave[] = "—";
+static char eacute[] = "Â‚";
+static char egrave[] = "ÂŠ";
+static char agrave[] = "Â…";
+static char ugrave[] = "Â—";
 #endif
 
 

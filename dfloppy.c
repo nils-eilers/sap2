@@ -19,7 +19,7 @@
 
 /* Limitations:
  *  - les faces 1 des disquettes ne sont pas accessibles,
- *  - les disquettes simple densité (format FM) ne sont pas lisibles.
+ *  - les disquettes simple densitÃ© (format FM) ne sont pas lisibles.
  */
 
 #ifndef SCAN_DEPEND
@@ -54,22 +54,22 @@ static unsigned char pc_dpt[DPT_SIZE];
 
 
 /* SetDiskParameters:
- *  Initialise les paramètres disquette pour le format Thomson.
+ *  Initialise les paramÃ¨tres disquette pour le format Thomson.
  */
 static void SetDiskParameters(int density)
 {
    unsigned char to_dpt[DPT_SIZE];
 
    if (!dpt_addr) {
-      /* on récupère le vecteur 0x1E du BIOS qui pointe sur la table
-         des paramètres de la disquette */
+      /* on rÃ©cupÃ¨re le vecteur 0x1E du BIOS qui pointe sur la table
+         des paramÃ¨tres de la disquette */
       _dosmemgetl(0x1E*4, 1, &dpt_addr);
 
-      /* on sauvegarde les paramètres originaux */
+      /* on sauvegarde les paramÃ¨tres originaux */
       _dosmemgetb(dpt_addr, DPT_SIZE, pc_dpt);
    }
 
-   /* on fixe les nouveaux paramètres */
+   /* on fixe les nouveaux paramÃ¨tres */
    to_dpt[0x0]=0xDF;  /* spec1                      */
    to_dpt[0x1]=0x02;  /* spec2                      */
    to_dpt[0x2]=0x25;  /* motor turn off delay       */
@@ -90,7 +90,7 @@ static void SetDiskParameters(int density)
 
 
 /* ExecCommand:
- *  Exécute la commande spécifiée (via l'interruption 13h du BIOS).
+ *  ExÃ©cute la commande spÃ©cifiÃ©e (via l'interruption 13h du BIOS).
  */
 static int ExecCommand(int drive, int density, struct floppy_cmd *fd_cmd)
 {
@@ -106,7 +106,7 @@ static int ExecCommand(int drive, int density, struct floppy_cmd *fd_cmd)
       if (ret==0)  /* commande OK? */
          break;
 
-      if ((i>1) && (ret==0x11)) { /* commande non OK mais corrigée par ctrl? */
+      if ((i>1) && (ret==0x11)) { /* commande non OK mais corrigÃ©e par ctrl? */
          ret=0;
          break;
       }
@@ -121,18 +121,18 @@ static int ExecCommand(int drive, int density, struct floppy_cmd *fd_cmd)
          return 0x04;   /* erreur sur l'adresse */
 
       case 0x03:  /* disk write-protected */
-         return 0x01;   /* disk protégé en écriture */
+         return 0x01;   /* disk protÃ©gÃ© en Ã©criture */
 
       case 0x04:  /* sector not found */
       case 0x07:  /* drive parameter activity failed */
       case 0x10:  /* data read (CRC or ECC) error */
       case 0x0A:  /* bad sector flag detected */
       case 0x0B:  /* bad track flag detected */
-         return 0x08;   /* erreur sur les données */
+         return 0x08;   /* erreur sur les donnÃ©es */
 
       case 0x06:  /* floppy disk removed */
       case 0x80:  /* disk timed out or failed to respond */
-         return 0x10;   /* lecteur non prêt */
+         return 0x10;   /* lecteur non prÃªt */
 
       default:
          return 0;  /* OK */
@@ -142,7 +142,7 @@ static int ExecCommand(int drive, int density, struct floppy_cmd *fd_cmd)
 
 
 /* FloppyReadSector:
- *  Lit le secteur spécifié sur la disquette.
+ *  Lit le secteur spÃ©cifiÃ© sur la disquette.
  */
 int FloppyReadSector(int drive, int density, int track, int sector, int nsects, unsigned char data[])
 {
@@ -161,7 +161,7 @@ int FloppyReadSector(int drive, int density, int track, int sector, int nsects, 
 
 
 /* FloppyWriteSector:
- *  Ecrit le secteur spécifié sur la disquette.
+ *  Ecrit le secteur spÃ©cifiÃ© sur la disquette.
  */
 int FloppyWriteSector(int drive, int density, int track, int sector, int nsects, const unsigned char data[])
 {
@@ -180,14 +180,14 @@ int FloppyWriteSector(int drive, int density, int track, int sector, int nsects,
 
 
 /* FloppyFormatTrack:
- *  Formate la piste en utilisant la table des headers spécifiée.
+ *  Formate la piste en utilisant la table des headers spÃ©cifiÃ©e.
  */
 int FloppyFormatTrack(int drive, int density, int track, const unsigned char header_table[])
 {
    struct floppy_cmd fd_cmd;
    int format_type = 0;
 
-   /* sélection du format de formatage */
+   /* sÃ©lection du format de formatage */
    switch (drive_type[drive/2]) {
 
       case 1:
@@ -279,7 +279,7 @@ int FloppyInit(struct floppy_info *fi, int enable_write_support)
 void FloppyExit(void)
 {
    if (dpt_addr) {
-      /* restaure les paramètres originaux */
+      /* restaure les paramÃ¨tres originaux */
       _dosmemputb(pc_dpt, DPT_SIZE, dpt_addr);
 
       /* reset */
