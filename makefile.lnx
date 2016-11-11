@@ -1,14 +1,16 @@
 ##########################################################################
 # targets:                                                               #
 #  all (default) : build sap2 and sapfs                                  #
-#  install       : build and install sap2 and sapfs in $(HOME)/emu/sap   #
+#  install       : build and install sap2 and sapfs in $(PREFIX)/bin     #
 #  clean         : delete all rebuildable files                          #
-########################################################################## 
+##########################################################################
+
+PREFIX = /usr/local
 
 
 ################
 # object files #
-################ 
+################
 
 OBJ_DIR =
 OBJ_SAP = $(OBJ_DIR)sap2.o $(OBJ_DIR)libsap.o $(OBJ_DIR)lfloppy.o
@@ -36,13 +38,16 @@ CFLAGS = $(WFLAGS) $(OFLAGS)
 
 all: sap2 sapfs i18n
 
-install: sap2 sapfs
-	cp sap2 sapfs licence.txt sap2.txt sapfs.txt $(HOME)/emu/sap
+install: sap2 sapfs i18n
+	mkdir -p $(PREFIX)/bin
+	install -s sap2 sapfs $(PREFIX)/bin
+	make -C i18n install
 
 clean:
 	rm -f sap2 sapfs $(OBJ_DIR)*.o
+	make -C i18n clean
 
-sap2: $(OBJ_SAP) 
+sap2: $(OBJ_SAP)
 	$(CC) -s -o sap2 $(OBJ_SAP)
 
 sapfs: $(OBJ_SAPFS)
