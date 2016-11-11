@@ -21,7 +21,7 @@ destruction de fichiers.
 2. Comment l'obtenir ?
 ----------------------
 En le téléchargeant depuis la page Web:
-http://nostalgies.thomsonistes.org/utilitaires.html
+http://nostalgies.thomsonistes.org/transfert.html
 
 
 3. Fonctionnement du programme

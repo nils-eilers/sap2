@@ -21,7 +21,7 @@ MSDOS et Linux, en reprend intégralement les fonctionnalités.
 2. Comment l'obtenir ?
 ----------------------
 En le téléchargeant depuis la page Web:
-http://nostalgies.thomsonistes.org/utilitaires.html
+http://nostalgies.thomsonistes.org/transfert.html
 
 
 3. Fonctionnement du programme
