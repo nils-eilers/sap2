@@ -4,3 +4,5 @@ sapfs
 *.sap
 .AppleDouble*
 .DS_Store*
+*.mo
+*.pot

@@ -34,7 +34,7 @@ CFLAGS = $(WFLAGS) $(OFLAGS)
 
 .PHONY: all install clean
 
-all: sap2 sapfs
+all: sap2 sapfs i18n
 
 install: sap2 sapfs
 	cp sap2 sapfs licence.txt sap2.txt sapfs.txt $(HOME)/emu/sap
@@ -50,4 +50,7 @@ sapfs: $(OBJ_SAPFS)
 
 $(OBJ_DIR)%.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $<
+
+i18n: $(OBJ_SAP) $(OBJ_SAPFS)
+	make -C i18n
 

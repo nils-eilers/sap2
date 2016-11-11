@@ -1,0 +1,375 @@
+# SAP2
+# Copyright (C) 2000-2003 Eric Botcazou
+# This file is distributed under the same license as the SAP2 package.
+# Nils Eilers <nils.eilers@gmx.de>, 2016
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: SAP2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-11-10 14:03+0100\n"
+"PO-Revision-Date: 2016-11-04 13:39+0100\n"
+"Last-Translator: Nils Eilers <nils.eilers@gmx.de>\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.11\n"
+
+#: ../../sap2.c:638
+#, c-format
+msgid ""
+"\n"
+"*** Error: unable to format the disk ***\n"
+msgstr ""
+"\n"
+"*** Erreur: impossible de formater la disquette ***\n"
+
+#: ../../sap2.c:658
+#, c-format
+msgid ""
+"\n"
+"*** Error: unable to write disk ***\n"
+msgstr ""
+"\n"
+"*** Erreur: impossible d'écrire sur la disquette ***\n"
+
+#: ../../sap2.c:254
+#, c-format
+msgid ""
+"\n"
+"Creating file allocation table (track 20)..."
+msgstr ""
+"\n"
+" construction de la FAT (piste 20)"
+
+#: ../../sap2.c:346
+#, c-format
+msgid ""
+"\n"
+"Sector %d unreadable"
+msgstr ""
+"\n"
+"secteur %d illisible"
+
+#: ../../sap2.c:518
+#, c-format
+msgid " + drive 1\n"
+msgstr " + lecteur 1\n"
+
+#: ../../sap2.c:530
+#, c-format
+msgid ""
+" + drive 3\n"
+"\n"
+msgstr ""
+" + lecteur 3\n"
+"\n"
+
+#: ../../sap2.c:539
+#, c-format
+msgid " 1. Show the directory of a Thomson disk\n"
+msgstr "1. Visualiser le contenu d'une disquette Thomson\n"
+
+#: ../../sap2.c:540
+#, c-format
+msgid " 2. Create an empty SAP archive\n"
+msgstr "2. Créer une archive SAP vide\n"
+
+#: ../../sap2.c:541
+#, c-format
+msgid ""
+" 3. Archive a Thomson floppy disk to a SAP archive\n"
+"\n"
+msgstr ""
+"3. Archiver une disquette Thomson vers une archive SAP\n"
+"\n"
+
+#: ../../sap2.c:544
+#, c-format
+msgid " 4. View the contents of an SAP archive\n"
+msgstr "4. Visualiser le contenu d'une archive SAP\n"
+
+#: ../../sap2.c:545
+#, c-format
+msgid " 5. Format a 3\"5 (720 KB) or 5\"25 disk with Thomson format\n"
+msgstr "5. Formater une disquette 3\"5 (720 ko) ou 5\"25 au format Thomson\n"
+
+#: ../../sap2.c:546
+#, c-format
+msgid ""
+" 6. Unpack SAP archive to Thomson disk\n"
+"\n"
+msgstr ""
+"6. Désarchiver une archive SAP vers une disquette Thomson\n"
+"\n"
+
+#: ../../sap2.c:549
+#, c-format
+msgid ""
+" 7. Quit\n"
+"\n"
+msgstr ""
+"7. Quitter\n"
+"\n"
+
+#: ../../sap2.c:732
+#, c-format
+msgid ""
+"%s without parameters enters the interactive mode\n"
+"\n"
+msgstr ""
+"%s (mode interactif)\n"
+"\n"
+
+#: ../../sap2.c:618 ../../sap2.c:656
+#, c-format
+msgid "*** Error: SAP archive corrupted ***\n"
+msgstr "*** Erreur: archive SAP corrompue ***\n"
+
+#: ../../sap2.c:587 ../../sap2.c:601
+#, c-format
+msgid "*** Error: unable to create the file %s ***\n"
+msgstr "*** Erreur: impossible de créer le fichier %s ***\n"
+
+#: ../../sap2.c:616 ../../sap2.c:654
+#, c-format
+msgid "*** Error: unable to open file %s ***\n"
+msgstr "*** Erreur: impossible d'ouvrir le fichier %s ***\n"
+
+#: ../../sap2.c:640
+#, c-format
+msgid "*** Error: unable to write to disk ***\n"
+msgstr "*** Erreur: impossible d'écrire sur la disquette ***\n"
+
+#: ../../sap2.c:567
+#, c-format
+msgid "*** Error: unreadable directory ***\n"
+msgstr "*** Erreur: répertoire illisible ***\n"
+
+#. printf("o%s la commande1 est prise parmi les suivantes:\n", ugrave);
+#: ../../sap2.c:739
+#, c-format
+msgid "-h, --help\tShow this help text\n"
+msgstr "-h, --help\taffice cette aide\n"
+
+#: ../../sap2.c:740
+#, c-format
+msgid ""
+"-v, --version\tPrint the version of the program plus a copyright and a list "
+"of  authors\n"
+msgstr "-v, --version\taffice la version du programme\n"
+
+#: ../../sap2.c:65
+msgid "3.5 -  720 KB"
+msgstr "3\"5 -  720 ko"
+
+#: ../../sap2.c:66
+msgid "3.5 - 1.44 MB"
+msgstr "3\"5 - 1.44 Mo"
+
+#: ../../sap2.c:67 ../../sap2.c:68
+msgid "3.5 - 2.88 MB"
+msgstr "3\"5 - 2.88 Mo"
+
+#: ../../sap2.c:64
+msgid "5.25 - 1.2 MB"
+msgstr "5\"25 - 1.2 Mo"
+
+#: ../../sap2.c:63
+msgid "5.25 - 360 KB"
+msgstr "5\"25 - 360 ko"
+
+#: ../../sap2.c:592
+#, c-format
+msgid "Archive a Thomson floppy disk to a SAP archive:\n"
+msgstr "Archivage d'une disquette:\n"
+
+#: ../../sap2.c:648
+#, c-format
+msgid "Archive filename (without file extension): "
+msgstr "nom de l'archive (sans extension): "
+
+#: ../../sap2.c:511
+#, c-format
+msgid "Based on SAP, Copyright (C) 1998 Alexandre Pukall\n"
+msgstr "Basé sur SAP, Copyright (C) 1998 Alexandre Pukall\n"
+
+#: ../../sap2.c:512
+#, fuzzy, c-format
+msgid ""
+"Copyright (C) 2000-2003 Eric Botcazou\n"
+"\n"
+msgstr "SAP2 version %s pour %s, copyright (C) 2000-2003 Eric Botcazou.\n"
+
+#: ../../sap2.c:572
+#, c-format
+msgid "Create an empty SAP archive:\n"
+msgstr "Création d'une archive vide:\n"
+
+#: ../../sap2.c:523
+#, c-format
+msgid "Drive A: (%s)\n"
+msgstr "Lecteur A: (%s)\n"
+
+#: ../../sap2.c:515
+#, c-format
+msgid "Drive A: (%s) --> drive 0"
+msgstr "Lecteur A: (%s) --> lecteur 0"
+
+#: ../../sap2.c:535
+#, c-format
+msgid ""
+"Drive B: (%s)\n"
+"\n"
+msgstr ""
+"Lecteur B: (%s)\n"
+"\n"
+
+#: ../../sap2.c:527
+#, c-format
+msgid "Drive B: (%s) --> drive 2"
+msgstr "Lecteur B: (%s) --> lecteur 2"
+
+#: ../../sap2.c:608
+#, c-format
+msgid "Filename (without file extension): "
+msgstr "nom de l'archive (sans extension): "
+
+#: ../../sap2.c:594
+#, c-format
+msgid "Filename of the archive to create (without file extension): "
+msgstr "nom de l'archive à créer (sans extension): "
+
+#: ../../sap2.c:623
+#, c-format
+msgid "Format a Thomson floppy disk:\n"
+msgstr "Formatage d'une disquette au format Thomson:\n"
+
+#: ../../sap2.c:630
+#, c-format
+msgid "Interleave factor ([1..%d], %d recommend): "
+msgstr "facteur d'entrelacement ([1..%d], %d recommandé): "
+
+#: ../../sap2.c:574
+#, c-format
+msgid "Name of the archive to create (without file extension): "
+msgstr "nom de l'archive à créer (sans extension): "
+
+#: ../../sap2.c:548
+#, c-format
+msgid "Other commands:\n"
+msgstr "Autres commandes:\n"
+
+#: ../../sap2.c:624
+#, c-format
+msgid ""
+"Please note: a double density disk (without a hole opposite the write "
+"protect switch) is required, a high density disk won't work."
+msgstr ""
+"Remarque: un disque de densité double (sans trou opposé au commutateur de "
+"protection en écriture) est requis, un disque haute densité ne fonctionnera "
+"pas."
+
+#: ../../sap2.c:95 ../../sap2.c:666
+#, c-format
+msgid "Press <Return>"
+msgstr "Appuyer sur <Return>"
+
+#: ../../sap2.c:331
+#, c-format
+msgid "Reading track %d..."
+msgstr "lecture piste %d"
+
+#. help
+#: ../../sap2.c:730
+#, c-format
+msgid ""
+"SAP2 is a tool to read and write Thomson 3\"5 and 5\"25 floppy disks\n"
+"\n"
+msgstr ""
+"SAP2 est un système d'archivage pour disquettes 3\"5 et 5\"25 Thomson.\n"
+
+#. version
+#. / 1st %s: version string (e.g. 2.0.96), 2nd %s: name of * operating system
+#: ../../sap2.c:755
+#, c-format
+msgid "SAP2 version %s for %s, copyright (C) 2000-2003 Eric Botcazou.\n"
+msgstr "SAP2 version %s pour %s, copyright (C) 2000-2003 Eric Botcazou.\n"
+
+#: ../../sap2.c:509
+#, c-format
+msgid "SAP2, floppy disk transfer tool for 3.5\" and 5.25\" Thomson disks\n"
+msgstr "SAP2, système d'archivage pour disquettes 3\"5 et 5\"25 Thomson\n"
+
+#: ../../sap2.c:561
+#, c-format
+msgid "Show disk directory:\n"
+msgstr "Visualisation du contenu d'une disquette:\n"
+
+#: ../../sap2.c:543
+#, c-format
+msgid "Transfer PC-->TO:\n"
+msgstr "Transfert PC-->TO:\n"
+
+#: ../../sap2.c:538
+#, c-format
+msgid "Transfer TO-->PC:\n"
+msgstr "Transfert TO-->PC:\n"
+
+#: ../../sap2.c:644
+#, c-format
+msgid "Unpack SAP archive to Thomson disk:\n"
+msgstr "Désarchivage vers une disquette:\n"
+
+#: ../../sap2.c:731
+#, c-format
+msgid "Usage:\n"
+msgstr "Usage:\n"
+
+#: ../../sap2.c:510
+#, c-format
+msgid "Version %s (%s), "
+msgstr "Version %s (%s), "
+
+#: ../../sap2.c:606
+#, c-format
+msgid "View the contents of an SAP archive\n"
+msgstr "affice la liste des fichiers de l'archive SAP\n"
+
+#: ../../sap2.c:425
+#, c-format
+msgid "Writing track %d..."
+msgstr "écriture piste %d"
+
+#: ../../sap2.c:552
+#, c-format
+msgid "Your choice: "
+msgstr "Votre choix: "
+
+#: ../../sap2.c:486
+#, c-format
+msgid "density (1:single, 2:double): "
+msgstr "densité (1: simple, 2: double): "
+
+#: ../../sap2.c:471
+#, c-format
+msgid "drive number: "
+msgstr "numéro du lecteur: "
+
+#: ../../sap2.c:579
+#, c-format
+msgid "format (1:5\"25 SD, 2:5\"25 DD, 3:3\"5 DD): "
+msgstr "format (1:5\"25 SD, 2:5\"25 DD, 3:3\"5 DD): "
+
+#: ../../sap2.c:62
+msgid "not available"
+msgstr "non disponible"
+
+#~ msgid ""
+#~ "Copyright (C) 2000-2003 Eric Botcazou, Copyright (C) 2016 Nils Eilers\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Copyright (C) 2000-2003 Eric Botcazou, Copyright (C) 2016 Nils Eilers\n"
+#~ "\n"

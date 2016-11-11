@@ -24,11 +24,17 @@
 #include <time.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#include <libintl.h>
+#include <locale.h>
 #include "libsap.h"
 
+#define _(String) gettext (String)
+#define gettext_noop(String) String
+#define N_(String) gettext_noop(String)
 
 
 #define SAPFS_VERSION_STR "0.9.6"
+
 
 #ifdef linux
    #define SAPFS_PLATFORM_STR "Linux"
@@ -39,21 +45,6 @@
 #define FILENAME_LENGTH 512
 
 
-/* ugly hack to support French accents */
-#ifdef linux
-static char eacute[] = "é";
-static char egrave[] = "è";
-static char agrave[] = "à";
-static char ugrave[] = "ù";
-#else
-static char eacute[] = "";
-static char egrave[] = "";
-static char agrave[] = "";
-static char ugrave[] = "";
-#endif
-
-
-
 /* PrintErrorMessage:
  *  Prints the error message corresponding to the specified error.
  */
@@ -62,27 +53,27 @@ static void PrintErrorMessage(int errno, const char str[])
    switch (errno) {
 
       case SAP_EBADF:
-         fprintf(stderr, "Erreur: le fichier %s n'est pas une archive SAP valide.\n", str);
+         fprintf(stderr, _("Error: file %s is not a valid SAP archive\n"), str);
          break;
 
       case SAP_EFBIG:
-         fprintf(stderr, "Erreur: le fichier %s est de taille trop importante.\n", str);
+         fprintf(stderr, _("Error: file %s is too large\n"), str);
          break;
 
       case SAP_ENFILE:
-         fprintf(stderr, "Erreur: le fichier %s est vide.\n", str);
+         fprintf(stderr, _("Error: file %s is empty\n"), str);
          break;
 
       case SAP_ENOENT:
-         fprintf(stderr, "Erreur: le fichier %s est introuvable.\n", str);
+         fprintf(stderr, _("Error: can't find file %s\n"), str);
          break;
 
       case SAP_ENOSPC:
-         fprintf(stderr, "Erreur: le r%spertoire de l'archive est plein.\n", eacute);
+         fprintf(stderr, _("Error: the archive directory is full\n"));
          break;
 
       case SAP_EPERM:
-         fprintf(stderr, "Erreur: impossible de cr%ser le fichier %s.\n", eacute, str);
+         fprintf(stderr, _("Error: can't create file %s.\n"), str);
          break;
    }
 }
@@ -168,7 +159,7 @@ static int VerifyArchive(const char sap_name[], int track, int sect)
    }
    else {
       if (track>=ntracks) {
-         fprintf(stderr, "Erreur: num%sro de piste invalide.\n", eacute);
+         fprintf(stderr, _("Error: illegal track number\n"));
          sap_CloseArchive(sap_file);
          return 1;
       }
@@ -183,7 +174,7 @@ static int VerifyArchive(const char sap_name[], int track, int sect)
    }
    else {
       if ((sect<1) || (sect>SAP_NSECTS)) {
-         fprintf(stderr, "Erreur: num%sro de secteur invalide.\n", eacute);
+         fprintf(stderr, _("Error: illegal sector number\n"));
          sap_CloseArchive(sap_file);
          return 1;
       }
@@ -196,19 +187,19 @@ static int VerifyArchive(const char sap_name[], int track, int sect)
          flag = sap_ReadSector(sap_file, t, s, &sapsector);
 
          if (flag != SAP_OK) {
-            printf("track %d sector %02d: ", t, s);
+            printf(_("track %d sector %02d: "), t, s);
 
             if (flag & SAP_NO_STD_FMT)
-               printf("<format=%d> ", sapsector.format);
+               printf(_("<format=%d> "), sapsector.format);
 
             if (flag & SAP_PROTECTED)
-               printf("<protection=%d> ", sapsector.protection);
+               printf(_("<protection=%d> "), sapsector.protection);
 
             if (flag & SAP_BAD_SECTOR)
-               printf("<track=%d sector=%d> ", sapsector.track, sapsector.sector);
+               printf(_("<track=%d sector=%d> "), sapsector.track, sapsector.sector);
 
             if (flag & SAP_CRC_ERROR)
-               printf("<CRC error>");
+               printf(_("<CRC error>"));
 
             printf("\n");
          }
@@ -251,7 +242,7 @@ static int DumpArchive(const char sap_name[], int track, int sect)
    }
    else {
       if (track>=ntracks) {
-         fprintf(stderr, "Erreur: num%sro de piste invalide.\n", eacute);
+         fprintf(stderr, _("Error: illegal track number\n"));
          sap_CloseArchive(sap_file);
          return 1;
       }
@@ -266,7 +257,7 @@ static int DumpArchive(const char sap_name[], int track, int sect)
    }
    else {
       if ((sect<1) || (sect>SAP_NSECTS)) {
-         fprintf(stderr, "Erreur: num%sro de secteur invalide.\n", eacute);
+         fprintf(stderr, _("Error: illegal sector number\n"));
          sap_CloseArchive(sap_file);
          return 1;
       }
@@ -359,20 +350,20 @@ static int PrintFileInfo(const char sap_name[], char filename[])
       ret = 1;
    }
    else {
-      printf("name: %s\n", filename);
-      printf("size: %d bytes\n", info.size);
-      printf("file type: %d\n", info.file_type);
-      printf("data type: %d\n", info.data_type);
+      printf(_("name: %s\n"), filename);
+      printf(_("size: %d bytes\n"), info.size);
+      printf(_("file type: %d\n"), info.file_type);
+      printf(_("data type: %d\n"), info.data_type);
 
       if (info.date) {
          strftime(tmp, sizeof(tmp), "%m/%d/%Y %H:%M ", localtime(&info.date));
-         printf("date: %s\n", tmp);
+         printf(_("date: %s\n"), tmp);
       }
 
       if (info.comment[0])
-         printf("comment: %s\n", info.comment);
+         printf(_("comment: %s\n"), info.comment);
 
-      printf("blocks: ");
+      printf(_("blocks: "));
       for (i=0; i<info.nblocks; i++)
          printf("%d ", info.block[i]);
       printf("\n");
@@ -437,14 +428,14 @@ static int AddFile(const char sap_name[], char *filename[], int nfiles)
    for (i=0; i<nfiles; i++) {
       /* get file statistics */
       if (stat(filename[i], &s) != 0) {
-         fprintf(stderr, "Erreur: le fichier %s est introuvable.\n", filename[i]);
+         fprintf(stderr, _("Error: can't find file %s\n"), filename[i]);
          ret = 1;
          break;
       }
 
       if (S_ISDIR(s.st_mode)) {  /* directory? */
          if ((dir=opendir(filename[i])) == NULL) {
-            fprintf(stderr, "Erreur: le r%spertoire %s est inaccessible en lecture.\n", eacute, filename[i]);
+            fprintf(stderr, _("Error: can't read directory %s\n"), filename[i]);
             ret = 1;
             break;
          }
@@ -538,7 +529,7 @@ static int CopyArchive(const char src_name[], const char dest_name[], int track,
    }
 
    if (src_format != dest_format) {
-      fprintf(stderr, "Erreur: archives de format diff%srent.\n", eacute);
+      fprintf(stderr, _("Error: different archive formats\n"));
       goto Error;
    }
 
@@ -551,7 +542,7 @@ static int CopyArchive(const char src_name[], const char dest_name[], int track,
    }
    else {
       if (track>=ntracks) {
-         fprintf(stderr, "Erreur: num%sro de piste invalide.\n", eacute);
+         fprintf(stderr, _("Error: illegal track number\n"));
          goto Error;
       }
 
@@ -565,7 +556,7 @@ static int CopyArchive(const char src_name[], const char dest_name[], int track,
    }
    else {
       if ((sect<1) || (sect>SAP_NSECTS)) {
-         fprintf(stderr, "Erreur: num%sro de secteur invalide.\n", eacute);
+         fprintf(stderr, _("Error: illegal sector number\n"));
          goto Error;
       }
 
@@ -618,33 +609,23 @@ static int MoveSector(const char src_name[], int src_track, int src_sect,
    }
 
    if (src_format != dest_format) {
-      fprintf(stderr, "Erreur: archives de format diff%srent.\n", eacute);
+      fprintf(stderr, _("Error: different archive formats\n"));
       goto Error;
    }
 
    ntracks = (src_format == SAP_FORMAT1 ? SAP_NTRACKS1 : SAP_NTRACKS2);
 
    /* check track number */
-   if ((src_track<0) || (src_track>=ntracks)) {
-      fprintf(stderr, "Erreur: num%sro de piste invalide.\n", eacute);
+   if ((src_track<0)  || (src_track>=ntracks) ||
+       (dest_track<0) || (dest_track>=ntracks)) {
+      fprintf(stderr, _("Error: illegal track number\n"));
       goto Error;
    }
 
    /* check sector number */
-   if ((src_sect<1) || (src_sect>SAP_NSECTS)) {
-      fprintf(stderr, "Erreur: num%sro de secteur invalide.\n", eacute);
-      goto Error;
-   }
-
-   /* check track number */
-   if ((dest_track<0) || (dest_track>=ntracks)) {
-      fprintf(stderr, "Erreur: num%sro de piste invalide.\n", eacute);
-      goto Error;
-   }
-
-   /* check sector number */
-   if ((dest_sect<1) || (dest_sect>SAP_NSECTS)) {
-      fprintf(stderr, "Erreur: num%sro de secteur invalide.\n", eacute);
+   if ((src_sect<1)  || (src_sect>SAP_NSECTS) ||
+       (dest_sect<1) || (dest_sect>SAP_NSECTS)) {
+      fprintf(stderr, _("Error: illegal sector number\n"));
       goto Error;
    }
 
@@ -680,7 +661,7 @@ static char *long_command[] = { "--help", "--version", "--create", "--format", "
  */
 static void usage(const char prog_name[])
 {
-   fprintf(stderr, "Usage: %s -h --help | -v --version | -c --create |  -f --format\n", prog_name);
+   fprintf(stderr, _("Usage: %s -h --help | -v --version | -c --create |  -f --format\n"), prog_name);
    fprintf(stderr, "               -w --verify | -d --dump | -t --list | -i --info\n");
    fprintf(stderr, "               -x --extract[-all] | -a --add | -d --delete\n");
    exit(EXIT_FAILURE);
@@ -695,6 +676,10 @@ int main(int argc, char *argv[])
 {
    int i, ret = 0;
    char *star = "*";
+
+   setlocale(LC_ALL, "");
+   bindtextdomain("sapfs", "/usr/share/locale");
+   textdomain("sapfs");
 
    if (argc < 2)  /* no argument? */
       usage(argv[0]);
@@ -714,35 +699,33 @@ int main(int argc, char *argv[])
             usage(argv[0]);
 
          case 'h':  /* help */
-            printf("SAPfs est un outil de manipulation des archives SAP qui permet de r%saliser\n", eacute);
-            printf("sur ces archives les op%srations naturelles d'un syst%sme de fichiers.\n\n", eacute, egrave);
-            printf("Usage:\n");
-            printf("    %s commande1 archive.sap [fichier...] [piste] [sect]\n", argv[0]);
-            printf("    %s commande2 archive.sap [nb pistes] [densit%s]\n", argv[0], eacute);
-            printf("    %s commande3 archive.sap archive2.sap [piste] [sect]\n", argv[0]);
-            printf("    %s commande4 archive1.sap piste sect archive2.sap piste sect\n", argv[0]);
-            printf("o%s la commande1 est prise parmi les suivantes:\n", ugrave);
-            printf("  -h, --help          affiche cette aide\n");
-            printf("  -v, --version       affiche la version du programme\n");
-            printf("  -w, --verify        effectue une v%srification d'un ou plusieurs secteurs\n", eacute);
-            printf("  -u, --dump          affiche le contenu d'un ou plusieurs secteurs\n");
-            printf("  -t, --list          affiche la liste des fichiers de l'archive SAP\n");
-            printf("  -i, --info          affiche les informations relatives %s un fichier\n", agrave);
-            printf("  -x, --extract       extrait un ou plusieurs fichiers de l'achive SAP\n");
-            printf("      --extract-all   extrait tous les fichiers de l'archive SAP\n");
-            printf("  -a, --add           ajoute un ou plusieurs fichiers %s l'archive SAP\n", agrave);
-            printf("  -d, --delete        d%struit un ou plusieurs fichiers de l'archive SAP\n", eacute);
-            printf("et o%s la commande2 est prise parmi les suivantes:\n", ugrave);
-            printf("  -c, --create        cr%se une archive SAP vide\n", eacute);
-            printf("  -f, --format        formate une archive SAP\n");
-            printf("et o%s la commande3 est prise parmi les suivantes:\n", ugrave);
-            printf("  -k, --copy          copie un ou plusieurs secteurs\n");
-            printf("et o%s la commande4 est prise parmi les suivantes:\n", ugrave);
-            printf("  -m, --move          copie un secteur avec d%splacement\n", eacute);
+            printf(_("SAPfs is an SAP archive handling tool to perform common file system"\
+                     "operations on image files\n\n"));
+            printf(_("Usage:\n\n"
+                   "    %s [-hituvwx] archive.sap [file...] [track] [sector]\n"
+                   "    %s -c | -f archive.sap [tracks] [density]\n"
+                   "    %s -k archive.sap archive2.sap [track] [sector]\n"
+                   "    %s -m archive1.sap track sector archive2.sap track sector\n\n"
+                   "  -a, --add           adds one or more files to the SAP archive\n"
+                   "  -c, --create        creates an empty SAP archive\n"
+                   "  -d, --delete        deletes one or multiple files from the SAP archive\n"
+                   "  -f, --format        formats an SAP archive\n"
+                   "  -h, --help          shows this help\n"
+                   "  -i, --info          displays information about a file\n"
+                   "  -k, --copy          copy one or more sectors\n"
+                   "  -m, --move          copy a sector with displacement\n"
+                   "  -t, --list          show the directory of the SAP archive\n"
+                   "  -u, --dump          dump the contents of one or more sectors\n"
+                   "  -v, --version       shows the version number of this program\n"
+                   "  -w, --verify        verify one or more sectors\n"
+                   "  -x, --extract       extracts one or more files from the SAP archive\n"
+                   "      --extract-all   extracts all files from the SAP archive\n"),
+                     argv[0], argv[0], argv[0], argv[0]);
             break;
 
          case 'v':  /* version */
-            printf("SAPfs version "SAPFS_VERSION_STR" pour "SAPFS_PLATFORM_STR", copyright (C) 2001-2003 Eric Botcazou.\n");
+            printf(_("SAPfs version %s for %s, Copyright (C) 2001-2003 Eric Botcazou.\n"),
+                SAPFS_VERSION_STR, SAPFS_PLATFORM_STR);
             break;
 
          case 'c':  /* create */

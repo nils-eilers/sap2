@@ -30,11 +30,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <libintl.h>
+#include <locale.h>
 #include "libsap.h"
 #include "floppy.h"
 
+#define _(String) gettext (String)
+#define gettext_noop(String) String
+#define N_(String) gettext_noop (String)
 
-#define SAP2_VERSION_STR "2.0.96"
+
+#define SAP2_VERSION_STR "2.2.0"
 
 #ifdef linux
    #define SAP2_PLATFORM_STR "Linux"
@@ -45,32 +51,21 @@
 #define FILENAME_LENGTH 128
 
 
-/* horrible hack pour supporter les accents... */
-#ifdef linux
-static char eacute[] = "é";
-static char egrave[] = "è";
-static char agrave[] = "à";
-static char ugrave[] = "ù";
-#else
-static char eacute[] = "";
-static char egrave[] = "";
-static char agrave[] = "";
-static char ugrave[] = "";
-#endif
-
 
 /* pour l'affichage du répertoire */
 #define PAGE_HEIGHT 22
 
 
 static struct floppy_info fi;
-static char *drive_type_name[7] = { "non disponible",
-                                    "5\"25 - 360 ko",
-                                    "5\"25 - 1.2 Mo",
-                                    "3\"5 -  720 ko",
-                                    "3\"5 - 1.44 Mo",
-                                    "3\"5 - 2.88 Mo",
-                                    "3\"5 - 2.88 Mo" };
+static char *drive_type_name[7] = {
+  gettext_noop ("not available"),
+  gettext_noop ("5.25 - 360 KB"),
+  gettext_noop ("5.25 - 1.2 MB"),
+  gettext_noop ("3.5 -  720 KB"),
+  gettext_noop ("3.5 - 1.44 MB"),
+  gettext_noop ("3.5 - 2.88 MB"),
+  gettext_noop( "3.5 - 2.88 MB")
+};
 
 #define IS_5_INCHES(drive) ((fi.drive_type[drive]>0) && (fi.drive_type[drive]<3))
 
@@ -96,7 +91,7 @@ static void term_puts(const char buffer[], int lines, int page_height)
       fwrite(start_cur, sizeof(char), end_cur-start_cur, stdout);
 
       fgets(trash, 7, stdin);
-      printf("Appuyer sur <Return>");
+      printf(_("Press <Return>"));
       getchar();
       printf("\n");
       ungetc('\n', stdin);
@@ -238,7 +233,7 @@ static int FormatDisk(int drive, int density, int factor, int verbose)
    /* formatage des pistes */
    for (track=0; track<num_tracks; track++) {
       if (verbose) {
-         printf("\r formatage piste %d", track);
+         printf("\rFormatting track %d...", track);
          fflush(stdout);
       }
 
@@ -255,7 +250,7 @@ static int FormatDisk(int drive, int density, int factor, int verbose)
    }
 
    if (verbose) {
-      printf("\n construction de la FAT (piste 20)");
+      printf(_("\nCreating file allocation table (track 20)..."));
       fflush(stdout);
    }
 
@@ -331,7 +326,8 @@ static int PackArchive(const char sap_name[], int drive, int density, int verbos
 
    for (track=0; track<num_tracks; track++) {
       if (verbose) {
-         printf("\r lecture piste %d", track);
+         printf("\r");
+         printf(_("Reading track %d..."), track);
          fflush(stdout);
       }
 
@@ -346,7 +342,7 @@ static int PackArchive(const char sap_name[], int drive, int density, int verbos
             if (FloppyReadSector(drive, density, track, sect, 1, buffer) != 0) {
                /* erreur de lecture du secteur */
                if (verbose)
-                  printf("\n   secteur %d illisible", sect);
+                  printf(_("\nSector %d unreadable"), sect);
 
                sapsector.format = 4;
                memset(sapsector.data, 0xF7, sect_size);
@@ -424,7 +420,8 @@ static int UnpackArchive(const char sap_name[], int drive, int density, int verb
 
    for (track=0; track<num_tracks; track++) {
       if (verbose) {
-         printf("\r %scriture piste %d", eacute, track);
+         printf("\r");
+         printf(_("Writing track %d..."), track);
          fflush(stdout);
       }
 
@@ -470,7 +467,7 @@ static void get_drive(int *drive, int *density)
 
    if (fi.num_drives > 1) {
       do {
-         printf(" num%sro du lecteur: ", eacute);
+         printf(_("drive number: "));
          if (!scanf("%d", drive))
             fgets(trash, 7, stdin);
       }
@@ -485,7 +482,7 @@ static void get_drive(int *drive, int *density)
 
    if (fi.fm_support && IS_5_INCHES(*drive)) {
       do {
-         printf(" densit%s (1:simple, 2:double): ", eacute);
+         printf(_("density (1:single, 2:double): "));
          if (!scanf("%d", density))
             fgets(trash, 7, stdin);
       }
@@ -508,47 +505,50 @@ static void interactive_main(void)
    char sap_name[FILENAME_LENGTH];
 
    while (1) {
-      printf("SAP2, syst%sme d'archivage pour disquettes 3\"5 et 5\"25 Thomson\n", egrave);
-      printf("version "SAP2_VERSION_STR" ("SAP2_PLATFORM_STR") copyright (C) 2000-2003 Eric Botcazou\n");
-      printf(" bas%s sur SAP copyright (C) Alexandre Pukall Avril 1998\n\n", eacute);
+      printf(_("SAP2, floppy disk transfer tool for 3.5\" and 5.25\" Thomson disks\n"));
+      printf(_("Version %s (%s), "), SAP2_VERSION_STR, SAP2_PLATFORM_STR);
+      printf(_("Based on SAP, Copyright (C) 1998 Alexandre Pukall\n"));
+      printf(_("Copyright (C) 2000-2003 Eric Botcazou\n\n"));
 
       if (fi.drive_type[0] > 0) {
-         printf("Lecteur A: (%s) --> lecteur 0", drive_type_name[fi.drive_type[0]]);
+         printf(_("Drive A: (%s) --> drive 0"), gettext(drive_type_name[fi.drive_type[0]]));
 
          if (fi.drive_type[1] > 0)
-            printf(" + lecteur 1\n");
+            printf(_(" + drive 1\n"));
          else
             printf("\n");
       }
       else {
-         printf("Lecteur A: (%s)\n", drive_type_name[0]);
+         printf(_("Drive A: (%s)\n"), gettext(drive_type_name[0]));
       }
 
       if (fi.drive_type[2] > 0) {
-         printf("Lecteur B: (%s) --> lecteur 2", drive_type_name[fi.drive_type[2]]);
+         printf(_("Drive B: (%s) --> drive 2"), gettext(drive_type_name[fi.drive_type[2]]));
 
          if (fi.drive_type[3] > 0)
-            printf(" + lecteur 3\n\n");
+            printf(_(" + drive 3\n\n"));
          else
             printf("\n\n");
       }
       else {
-         printf("Lecteur B: (%s)\n\n", drive_type_name[0]);
+         printf(_("Drive B: (%s)\n\n"), gettext(drive_type_name[0]));
       }
 
-      printf("Transfert TO-->PC:\n");
-      printf(" 1. Visualiser le contenu d'une disquette Thomson\n");
-      printf(" 2. Cr%ser une archive SAP vide\n", eacute);
-      printf(" 3. Archiver une disquette Thomson vers une archive SAP\n");
-      printf("Transfert PC-->TO:\n");
-      printf(" 4. Visualiser le contenu d'une archive SAP\n");
-      printf(" 5. Formater une disquette 3\"5 (720 ko) ou 5\"25 au format Thomson\n");
-      printf(" 6. D%ssarchiver une archive SAP vers une disquette Thomson\n", eacute);
-      printf("Autres commandes:\n");
-      printf(" 7. Quitter\n\n");
+      printf(_("Transfer TO-->PC:\n"));
+      printf(_(" 1. Show the directory of a Thomson disk\n"));
+      printf(_(" 2. Create an empty SAP archive\n"));
+      printf(_(" 3. Archive a Thomson floppy disk to a SAP archive\n\n"));
+
+      printf(_("Transfer PC-->TO:\n"));
+      printf(_(" 4. View the contents of an SAP archive\n"));
+      printf(_(" 5. Format a 3\"5 (720 KB) or 5\"25 disk with Thomson format\n"));
+      printf(_(" 6. Unpack SAP archive to Thomson disk\n\n"));
+
+      printf(_("Other commands:\n"));
+      printf(_(" 7. Quit\n\n"));
 
       do {
-         printf("Votre choix: ");
+         printf(_("Your choice: "));
          if (!scanf("%d", &c))
             fgets(trash, 7, stdin);
       }
@@ -557,25 +557,25 @@ static void interactive_main(void)
       switch (c) {
 
          case 1:
-            printf("Visualisation du contenu d'une disquette:\n");
+            printf(_("Show disk directory:\n"));
             get_drive(&drive, &density);
             printf("\n");
 
             ret = ViewDiskDir(drive, density, PAGE_HEIGHT);
             if (ret == 1)
-               printf("*** Erreur: r%spertoire illisible ***\n", eacute);
+               printf(_("*** Error: unreadable directory ***\n"));
 
             break;
 
          case 2:
-            printf("Cr%sation d'une archive vide:\n", eacute);
+            printf(_("Create an empty SAP archive:\n"));
 
-            printf(" nom de l'archive %s cr%ser (sans extension): ", agrave, eacute);
+            printf(_("Name of the archive to create (without file extension): "));
             scanf("%s", sap_name);
             strcat(sap_name, ".sap");
 
             do {
-               printf(" format (1:5\"25 SD, 2:5\"25 DD, 3:3\"5 DD): ");
+               printf(_("format (1:5\"25 SD, 2:5\"25 DD, 3:3\"5 DD): "));
                if (!scanf("%d", &format))
                   fgets(trash, 7, stdin);
             }
@@ -583,28 +583,28 @@ static void interactive_main(void)
 
             ret = CreateEmptyArchive(sap_name, (format == 1 ? SAP_FORMAT2 : SAP_FORMAT1), (format == 3 ? SAP_TRK80 : SAP_TRK40));
             if (ret == 1)
-               printf("*** Erreur: impossible de cr%ser le fichier %s ***\n", eacute, sap_name);
+               printf(_("*** Error: unable to create the file %s ***\n"), sap_name);
 
             break;
 
          case 3:
-            printf("Archivage d'une disquette:\n");
+            printf(_("Archive a Thomson floppy disk to a SAP archive:\n"));
 
-            printf(" nom de l'archive %s cr%ser (sans extension): ", agrave, eacute);
+            printf(_("Filename of the archive to create (without file extension): "));
             scanf("%s", sap_name);
             strcat(sap_name, ".sap");
 
             get_drive(&drive, &density);
             ret = PackArchive(sap_name, drive, density, 1);
             if (ret == 1)
-               printf("*** Erreur: impossible de cr%ser le fichier %s ***\n", eacute, sap_name);
+               printf(_("*** Error: unable to create the file %s ***\n"), sap_name);
 
             break;
 
          case 4:
-            printf("Visualisation du contenu d'une archive:\n");
+            printf(_("View the contents of an SAP archive\n"));
 
-            printf(" nom de l'archive (sans extension): ");
+            printf(_("Filename (without file extension): "));
             scanf("%s", sap_name);
             strcat(sap_name, ".sap");
 
@@ -612,21 +612,21 @@ static void interactive_main(void)
 
             ret = ViewArchiveDir(sap_name, PAGE_HEIGHT);
             if (ret == 1)
-               printf("*** Erreur: impossible d'ouvrir le fichier %s ***\n", sap_name);
+               printf(_("*** Error: unable to open file %s ***\n"), sap_name);
             else if (ret == 2)
-               printf("*** Erreur: archive SAP corrompue ***\n");
+               printf(_("*** Error: SAP archive corrupted ***\n"));
 
             break;
 
          case 5:
-            printf("Formatage d'une disquette au format Thomson:\n");
-            printf(" Si la disquette est une 3\"5 - 1.44 Mo, occulter l'encoche\n");
-            printf(" de droite (recto et verso) avec un morceau de scotch.\n");
+            printf(_("Format a Thomson floppy disk:\n"));
+            printf(_("Please note: a double density disk (without a hole opposite the "\
+            "write protect switch) is required, a high density disk won't work."));
 
             get_drive(&drive, &density);
-   
+
             do {
-               printf(" facteur d'entrelacement ([1..%d], %d recommand%s): ", SAP_NSECTS-1, (SAP_NSECTS-1)/2, eacute);
+               printf(_("Interleave factor ([1..%d], %d recommend): "), SAP_NSECTS-1, (SAP_NSECTS-1)/2);
                if (!scanf("%d", &factor))
                   fgets(trash, 7, stdin);
             }
@@ -634,27 +634,27 @@ static void interactive_main(void)
 
             ret = FormatDisk(drive, density, factor, 1);
             if (ret == 1)
-               printf("\n*** Erreur: impossible de formater la disquette ***\n");
+               printf(_("\n*** Error: unable to format the disk ***\n"));
             else if (ret == 2)
-               printf("*** Erreur: impossible d'%scrire sur la disquette ***\n", eacute);
+               printf(_("*** Error: unable to write to disk ***\n"));
             break;
 
          case 6:
-            printf("D%ssarchivage vers une disquette:\n", eacute);
+            printf(_("Unpack SAP archive to Thomson disk:\n"));
 
             get_drive(&drive, &density);
 
-            printf(" nom de l'archive (sans extension): ");
+            printf(_("Archive filename (without file extension): "));
             scanf("%s", sap_name);
             strcat(sap_name, ".sap");
 
             ret = UnpackArchive(sap_name, drive, density, 1);
             if (ret == 1)
-               printf("*** Erreur: impossible d'ouvrir le fichier %s ***\n", sap_name);
+               printf(_("*** Error: unable to open file %s ***\n"), sap_name);
             else if (ret == 2)
-               printf("*** Erreur: archive SAP corrompue ***\n");
+               printf(_("*** Error: SAP archive corrupted ***\n"));
             else if (ret == 3)
-               printf("\n*** Erreur: impossible d'%scrire sur la disquette ***\n", eacute);
+               printf(_("\n*** Error: unable to write disk ***\n"));
             break;
 
          case 7:
@@ -662,7 +662,7 @@ static void interactive_main(void)
       }
 
       fgets(trash, 7, stdin);
-      printf("Appuyer sur <Return>");
+      printf(_("Press <Return>"));
       fflush(stdout);
       getchar();
       printf("\n");
@@ -697,6 +697,10 @@ int main(int argc, char *argv[])
    int ret = 0;
    int i;
 
+   setlocale(LC_ALL, "");
+   bindtextdomain("sap2", "/usr/share/locale");
+   textdomain("sap2");
+
    if (argc < 2) { /* no argument? */
       if (FloppyInit(&fi, 1) > 0) {
          interactive_main();
@@ -722,28 +726,33 @@ int main(int argc, char *argv[])
                usage(argv[0]);
 
             case 'h':  /* help */
-               printf("SAP2 est un syst%sme d'archivage pour disquettes 3\"5 et 5\"25 Thomson. Il permet\n", egrave);
-               printf("de cr%ser des images de disquettes sous forme d'archive SAP.\n\n", eacute);
-               printf("Usage:\n");
-               printf("    %s (mode interactif)\n", argv[0]);
-               printf("    %s commande1 archive.sap [lecteur] [densit%s]\n", argv[0], eacute);
-               printf("    %s commande2 archive.sap [nb pistes] [densit%s]\n", argv[0], eacute);
-               printf("    %s commande3 lecteur [densit%s] [entrelacement]\n", argv[0], eacute);
-               printf("o%s la commande1 est prise parmi les suivantes:\n", ugrave);
-               printf("  -h, --help          affiche cette aide\n");
-               printf("  -v, --version       affiche la version du programme\n");
+               printf(_("SAP2 is a tool to read and write Thomson 3\"5 and 5\"25 floppy disks\n\n"));
+               printf(_("Usage:\n"));
+               printf(_("%s without parameters enters the interactive mode\n\n"), argv[0]);
+
+               printf("    commande1 archive.sap [lecteur] [densit%s]\n", argv[0]);
+               printf("    commande2 archive.sap [nb pistes] [densit%s]\n", argv[0]);
+               printf("    commande3 lecteur [densit%s] [entrelacement]\n", argv[0]);
+               //printf("o%s la commande1 est prise parmi les suivantes:\n", ugrave);
+
+               printf(_("-h, --help\tShow this help text\n"));
+               printf(_("-v, --version\tPrint the version of the program plus a copyright and "\
+                     "a list of  authors\n"));
+
                printf("  -t, --list          affiche la liste des fichiers de l'archive SAP\n");
                printf("  -p, --pack          archive une disquette Thomson vers une archive SAP\n");
-               printf("  -u, --unpack        d%ssarchive une archive SAP vers une disquette Thomson\n", eacute);
-               printf("et o%s la commande2 est prise parmi les suivantes:\n", ugrave);
-               printf("  -c, --create        cr%se une archive SAP vide\n", eacute);
-               printf("et o%s la commande3 est prise parmi les suivantes:\n", ugrave);
+               //printf("  -u, --unpack        d%ssarchive une archive SAP vers une disquette Thomson\n", eacute);
+               //printf("et o%s la commande2 est prise parmi les suivantes:\n", ugrave);
+               //printf("  -c, --create        cr%se une archive SAP vide\n", eacute);
+               //printf("et o%s la commande3 est prise parmi les suivantes:\n", ugrave);
                printf("  -d, --dir           affiche le contenu d'une disquette Thomson\n");
                printf("  -f, --format        formate une disquette au format Thomson\n");
                break;
 
             case 'v':  /* version */
-               printf("SAP2 version "SAP2_VERSION_STR" pour "SAP2_PLATFORM_STR", copyright (C) 2000-2003 Eric Botcazou.\n");
+               /// 1st %s: version string (e.g. 2.0.96), 2nd %s: name of * operating system
+               printf(_("SAP2 version %s for %s, copyright (C) 2000-2003 Eric Botcazou.\n"),
+                   SAP2_VERSION_STR, SAP2_PLATFORM_STR);
                break;
 
             case 'd':  /* dir */

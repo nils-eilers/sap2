@@ -1,0 +1,200 @@
+# SAPFS
+# Copyright (C) 2000-2003 Eric Botcazou
+# This file is distributed under the same license as the SAP2 package.
+# Nils Eilers <nils.eilers@gmx.de>, 2016
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: SAPFS\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-11-10 14:03+0100\n"
+"PO-Revision-Date: 2016-11-10 14:32+0100\n"
+"Last-Translator: Nils Eilers <nils.eilers@gmx.de>\n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.11\n"
+
+#: ../../sapfs.c:201
+#, c-format
+msgid "<CRC error>"
+msgstr "<CRC-Fehler>"
+
+#: ../../sapfs.c:192
+#, c-format
+msgid "<format=%d> "
+msgstr "<format=%d> "
+
+#: ../../sapfs.c:195
+#, c-format
+msgid "<protection=%d> "
+msgstr "<Schutz=%d> "
+
+#: ../../sapfs.c:198
+#, c-format
+msgid "<track=%d sector=%d> "
+msgstr "<Spur=%d Sektor=%d> "
+
+#: ../../sapfs.c:75
+#, c-format
+msgid "Error: can't create file %s.\n"
+msgstr "Fehler: kann Datei %s nicht anlegen\n"
+
+#: ../../sapfs.c:67 ../../sapfs.c:430
+#, c-format
+msgid "Error: can't find file %s\n"
+msgstr "Fehler: kann Datei %s nicht finden\n"
+
+#: ../../sapfs.c:437
+#, c-format
+msgid "Error: can't read directory %s\n"
+msgstr "Fehler: kann Inhaltsverzeichnis von %s nicht lesen\n"
+
+#: ../../sapfs.c:531 ../../sapfs.c:611
+#, c-format
+msgid "Error: different archive formats\n"
+msgstr "Fehler: Archiv hat anderes Format\n"
+
+#: ../../sapfs.c:63
+#, c-format
+msgid "Error: file %s is empty\n"
+msgstr "Fehler: Datei %s ist leer\n"
+
+#: ../../sapfs.c:55
+#, c-format
+msgid "Error: file %s is not a valid SAP archive\n"
+msgstr "Fehler: Datei %s ist kein gültiges SAP-Archiv\n"
+
+#: ../../sapfs.c:59
+#, c-format
+msgid "Error: file %s is too large\n"
+msgstr "Fehler: Datei %s ist zu groß\n"
+
+#: ../../sapfs.c:176 ../../sapfs.c:259 ../../sapfs.c:558 ../../sapfs.c:627
+#, c-format
+msgid "Error: illegal sector number\n"
+msgstr "Fehler: unzulässige Sektor-Nummer\n"
+
+#: ../../sapfs.c:161 ../../sapfs.c:244 ../../sapfs.c:544 ../../sapfs.c:620
+#, c-format
+msgid "Error: illegal track number\n"
+msgstr "Fehler: unzulässige Spur-Nummer\n"
+
+#: ../../sapfs.c:71
+#, c-format
+msgid "Error: the archive directory is full\n"
+msgstr "Fehler: das Inhaltsverzeichnis der Archiv-Datei ist voll\n"
+
+#. help
+#: ../../sapfs.c:701
+#, c-format
+msgid ""
+"SAPfs is an SAP archive handling tool to perform common file "
+"systemoperations on image files\n"
+"\n"
+msgstr ""
+"SAPfs ist ein Werkzeug um allgemeine Dateioperationen auf SAP-Imagedateien "
+"anzuwenden\n"
+"\n"
+
+#. version
+#: ../../sapfs.c:726
+#, c-format
+msgid "SAPfs version %s for %s, Copyright (C) 2001-2003 Eric Botcazou.\n"
+msgstr "SAPfs Version %s for %s, Copyright (C) 2001-2003 Eric Botcazou.\n"
+
+#: ../../sapfs.c:703
+#, c-format
+msgid ""
+"Usage:\n"
+"\n"
+"    %s [-hituvwx] archive.sap [file...] [track] [sector]\n"
+"    %s -c | -f archive.sap [tracks] [density]\n"
+"    %s -k archive.sap archive2.sap [track] [sector]\n"
+"    %s -m archive1.sap track sector archive2.sap track sector\n"
+"\n"
+"  -a, --add           adds one or more files to the SAP archive\n"
+"  -c, --create        creates an empty SAP archive\n"
+"  -d, --delete        deletes one or multiple files from the SAP archive\n"
+"  -f, --format        formats an SAP archive\n"
+"  -h, --help          shows this help\n"
+"  -i, --info          displays information about a file\n"
+"  -k, --copy          copy one or more sectors\n"
+"  -m, --move          copy a sector with displacement\n"
+"  -t, --list          show the directory of the SAP archive\n"
+"  -u, --dump          dump the contents of one or more sectors\n"
+"  -v, --version       shows the version number of this program\n"
+"  -w, --verify        verify one or more sectors\n"
+"  -x, --extract       extracts one or more files from the SAP archive\n"
+"      --extract-all   extracts all files from the SAP archive\n"
+msgstr ""
+"Bedienung:\n"
+"\n"
+"    %s [-hituvwx] Archiv.sap [Datei…] [Spur] [Sektor]\n"
+"    %s -c | -f Archive.sap [Spuren] [Dichte]\n"
+"    %s -k Archiv.sap Archive2.sap [Spur] [Sektor]\n"
+"    %s -m Archiv1.sap Spur Sektor Archive2.sap Spur Sektor\n"
+"\n"
+"  -a, --add           fügt eine oder mehrere Dateien dem SAP-Archiv hinzu\n"
+"  -c, --create        erzeugt ein leeres SAP-Archiv\n"
+"  -d, --delete        löscht eine oder mehrere Dateien aus dem SAP-Archiv\n"
+"  -f, --format        formatiert ein SAP-Archiv\n"
+"  -h, --help          zeigt diesen Hilfe-Text an\n"
+"  -i, --info          zeigt Informationen über eine Datei an\n"
+"  -k, --copy          kopiert einen oder mehrere Sektoren\n"
+"  -m, --move          kopiert einen Sektor mit Versatz\n"
+"  -t, --list          zeigt das Inhaltsverzeichnis eines SAP-Archivs an\n"
+"  -u, --dump          gibt den Inhalt eines oder mehrerer Sektoren aus\n"
+"  -v, --version       zeigt die Versionsnummer dieses Programms an\n"
+"  -w, --verify        überprüft einen oder mehrere Sektoren\n"
+"  -x, --extract       entpackt eine oder mehrere Dateien aus dem SAP-"
+"Archiv\n"
+"      --extract-all   entpackt alle Dateien aus dem SAP-Archiv\n"
+
+#: ../../sapfs.c:663
+#, c-format
+msgid "Usage: %s -h --help | -v --version | -c --create |  -f --format\n"
+msgstr ""
+"Bedienung: %s -h --help | -v --version | -c --create |  -f --format\n"
+
+#: ../../sapfs.c:365
+#, c-format
+msgid "blocks: "
+msgstr "Blöcke: "
+
+#: ../../sapfs.c:363
+#, c-format
+msgid "comment: %s\n"
+msgstr "Kommentar: %s\n"
+
+#: ../../sapfs.c:355
+#, c-format
+msgid "data type: %d\n"
+msgstr "Datentyp: %d\n"
+
+#: ../../sapfs.c:359
+#, c-format
+msgid "date: %s\n"
+msgstr "Datum: %s\n"
+
+#: ../../sapfs.c:354
+#, c-format
+msgid "file type: %d\n"
+msgstr "Dateityp: %d\n"
+
+#: ../../sapfs.c:352
+#, c-format
+msgid "name: %s\n"
+msgstr "Name: %s\n"
+
+#: ../../sapfs.c:353
+#, c-format
+msgid "size: %d bytes\n"
+msgstr "Größe: %d bytes\n"
+
+#: ../../sapfs.c:189
+#, c-format
+msgid "track %d sector %02d: "
+msgstr "Spur %d Sektor%02d:"
