@@ -702,7 +702,7 @@ int main(int argc, char *argv[])
             usage(argv[0]);
 
          case 'h':  /* help */
-            printf(_("SAPfs is an SAP archive handling tool to perform common file system"\
+            printf(_("SAPfs is an SAP archive handling tool to perform common file system\n"
                      "operations on image files\n\n"));
             printf(_("Usage:\n\n"
                    "    %s [-hituvwx] archive.sap [file...] [track] [sector]\n"

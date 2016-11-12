@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SAPFS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-11 23:29+0100\n"
+"POT-Creation-Date: 2016-11-12 03:02+0100\n"
 "PO-Revision-Date: 2016-11-12 02:20+0100\n"
 "Last-Translator: Nils Eilers <nils.eilers@gmx.de>\n"
 "Language-Team: \n"
@@ -88,24 +88,24 @@ msgid "Error: the archive directory is full\n"
 msgstr "Fehler: das Inhaltsverzeichnis der Archiv-Datei ist voll\n"
 
 #. help
-#: ../../sapfs.c:703
+#: ../../sapfs.c:705
 #, c-format
 msgid ""
-"SAPfs is an SAP archive handling tool to perform common file "
-"systemoperations on image files\n"
+"SAPfs is an SAP archive handling tool to perform common file system\n"
+"operations on image files\n"
 "\n"
 msgstr ""
-"SAPfs ist ein Werkzeug um allgemeine Dateioperationen auf SAP-Imagedateien "
+"SAPfs ist ein Werkzeug um allgemeine Dateioperationen auf SAP-Imagedateien\n"
 "anzuwenden\n"
 "\n"
 
 #. version
-#: ../../sapfs.c:728
+#: ../../sapfs.c:730
 #, c-format
 msgid "SAPfs version %s for %s, Copyright (C) 2001-2003 Eric Botcazou.\n"
 msgstr "SAPfs Version %s für %s, Copyright (C) 2001-2003 Eric Botcazou.\n"
 
-#: ../../sapfs.c:705
+#: ../../sapfs.c:707
 #, c-format
 msgid ""
 "Usage:\n"
