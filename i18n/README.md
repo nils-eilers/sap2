@@ -1,5 +1,6 @@
 How to start a new translation for a further language
 -----------------------------------------------------
+
 - Edit the Makefile in this directory and add the two or three
   letter code for the new language as listed in
   /usr/share/i18n/SUPPORTED such as "de" or "fr"
@@ -16,8 +17,10 @@ How to start a new translation for a further language
   the program expects it
 
 
+
 Updating a translation
 -----------------------
+
 - Edit the po-file to update a translation, then run "make" followed
   by "sudo make install" to apply the new strings.
 - Also, when the program changes and introduces new strings or removes

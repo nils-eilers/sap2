@@ -684,8 +684,8 @@ static char *long_command[] = {"--help", "--version", "--dir", "--create", "--pa
  */
 static void usage(const char prog_name[])
 {
-   fprintf(stderr, "Usage: %s  -h --help | -v --version | -t --list | -p --pack | -u --unpack\n", prog_name);
-   fprintf(stderr, "               -c --create | -d --dir | -f --format\n");
+   fprintf(stderr, _("Usage: %s  -h --help | -v --version | -t --list | -p --pack | -u --unpack\n"
+                     "               -c --create | -d --dir | -f --format\n"), prog_name);
    exit(EXIT_FAILURE);
 }
 
@@ -732,26 +732,24 @@ int main(int argc, char *argv[])
 
             case 'h':  /* help */
                printf(_("SAP2 is a tool to read and write Thomson 3\"5 and 5\"25 floppy disks\n\n"));
-               printf(_("Usage:\n"));
-               printf(_("%s without parameters enters the interactive mode\n\n"), argv[0]);
+               printf(_("Usage:\n\n"
+               "%s without parameters enters the interactive mode\n\n"
 
-               printf("    commande1 archive.sap [lecteur] [densit%s]\n", argv[0]);
-               printf("    commande2 archive.sap [nb pistes] [densit%s]\n", argv[0]);
-               printf("    commande3 lecteur [densit%s] [entrelacement]\n", argv[0]);
-               //printf("o%s la commande1 est prise parmi les suivantes:\n", ugrave);
+               "    %s -hv\n"
+               "    %s -tup archiv.sap [drive] [density]\n"
+               "    %s -c archive.sap [tracks] [density]\n"
+               "    %s -df drive [density] [interleave]\n\n"
 
-               printf(_("-h, --help\tShow this help text\n"));
-               printf(_("-v, --version\tPrint the version of the program plus a copyright and "\
-                     "a list of  authors\n"));
-
-               printf("  -t, --list          affiche la liste des fichiers de l'archive SAP\n");
-               printf("  -p, --pack          archive une disquette Thomson vers une archive SAP\n");
-               //printf("  -u, --unpack        d%ssarchive une archive SAP vers une disquette Thomson\n", eacute);
-               //printf("et o%s la commande2 est prise parmi les suivantes:\n", ugrave);
-               //printf("  -c, --create        cr%se une archive SAP vide\n", eacute);
-               //printf("et o%s la commande3 est prise parmi les suivantes:\n", ugrave);
-               printf("  -d, --dir           affiche le contenu d'une disquette Thomson\n");
-               printf("  -f, --format        formate une disquette au format Thomson\n");
+               "  -c, --create        create an empty SAP archiv\n"
+               "  -d, --dir           show the directory of a Thomson floppy disk\n"
+               "  -f, --format        format a disk with Thomson format\n"
+               "  -h, --help          Show this help text\n"
+               "  -p, --pack          Archive a Thomson floppy disk to a SAP archiv\n"
+               "  -t, --list          View the contents of an SAP archiv\n"
+               "  -u, --unpack        Unpack a SAP archive to a Thomson disk\n"
+               "  -v, --version       Print the version of the program plus a copyright and "
+                     "a list of  authors\n"),
+                       argv[0], argv[0], argv[0], argv[0], argv[0]);
                break;
 
             case 'v':  /* version */

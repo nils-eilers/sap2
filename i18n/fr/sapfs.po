@@ -1,112 +1,111 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SAPFS
+# Copyright (C) 2003 Eric Botcazou
+# This file is distributed under the same license as the SAP2 package.
+# Nils Eilers <nils.eilers@gmx.de>, 2016
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: SAPFS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-10 14:03+0100\n"
+"POT-Creation-Date: 2016-11-11 23:29+0100\n"
 "PO-Revision-Date: 2016-11-10 14:32+0100\n"
+"Last-Translator: Nils Eilers <nils.eilers@gmx.de>\n"
+"Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Last-Translator: Nils Eilers <nils.eilers@gmx.de>\n"
-"Language-Team: \n"
 "X-Generator: Poedit 1.8.11\n"
 
-#: ../../sapfs.c:201
+#: ../../sapfs.c:204
 #, c-format
 msgid "<CRC error>"
 msgstr "<CRC error>"
 
-#: ../../sapfs.c:192
+#: ../../sapfs.c:195
 #, c-format
 msgid "<format=%d> "
 msgstr "<format=%d> "
 
-#: ../../sapfs.c:195
+#: ../../sapfs.c:198
 #, c-format
 msgid "<protection=%d> "
 msgstr "<protection=%d> "
 
-#: ../../sapfs.c:198
+#: ../../sapfs.c:201
 #, c-format
 msgid "<track=%d sector=%d> "
-msgstr "<track=%d sector=%d> "
+msgstr "<piste=%d secteur=%d> "
 
-#: ../../sapfs.c:75
+#: ../../sapfs.c:78
 #, c-format
 msgid "Error: can't create file %s.\n"
 msgstr "Erreur: impossible de créer le fichier %s\n"
 
-#: ../../sapfs.c:67 ../../sapfs.c:430
+#: ../../sapfs.c:70 ../../sapfs.c:433
 #, c-format
 msgid "Error: can't find file %s\n"
 msgstr "Erreur: le fichier %s est introuvable\n"
 
-#: ../../sapfs.c:437
+#: ../../sapfs.c:440
 #, c-format
 msgid "Error: can't read directory %s\n"
 msgstr "Erreur: le répertoire %s est inaccessible en lecture\n"
 
-#: ../../sapfs.c:531 ../../sapfs.c:611
+#: ../../sapfs.c:534 ../../sapfs.c:614
 #, c-format
 msgid "Error: different archive formats\n"
 msgstr "Erreur: archives de format different\n"
 
-#: ../../sapfs.c:63
+#: ../../sapfs.c:66
 #, c-format
 msgid "Error: file %s is empty\n"
 msgstr "Erreur: le fichier %s est vide\n"
 
-#: ../../sapfs.c:55
+#: ../../sapfs.c:58
 #, c-format
 msgid "Error: file %s is not a valid SAP archive\n"
 msgstr "Erreur: le fichier %s n'est pas une archive SAP valide\n"
 
-#: ../../sapfs.c:59
+#: ../../sapfs.c:62
 #, c-format
 msgid "Error: file %s is too large\n"
 msgstr "Erreur: le fichier %s est de taille trop importante\n"
 
-#: ../../sapfs.c:176 ../../sapfs.c:259 ../../sapfs.c:558 ../../sapfs.c:627
+#: ../../sapfs.c:179 ../../sapfs.c:262 ../../sapfs.c:561 ../../sapfs.c:630
 #, c-format
 msgid "Error: illegal sector number\n"
 msgstr "Erreur: numéro de secteur invalide\n"
 
-#: ../../sapfs.c:161 ../../sapfs.c:244 ../../sapfs.c:544 ../../sapfs.c:620
+#: ../../sapfs.c:164 ../../sapfs.c:247 ../../sapfs.c:547 ../../sapfs.c:623
 #, c-format
 msgid "Error: illegal track number\n"
 msgstr "Erreur: numéro de piste invalide\n"
 
-#: ../../sapfs.c:71
+#: ../../sapfs.c:74
 #, c-format
 msgid "Error: the archive directory is full\n"
 msgstr "Erreur: le répertoire de l'archive est plein\n"
 
 #. help
-#: ../../sapfs.c:701
+#: ../../sapfs.c:703
 #, c-format
 msgid ""
 "SAPfs is an SAP archive handling tool to perform common file "
 "systemoperations on image files\n"
 "\n"
 msgstr ""
-"SAPfs est un outil de manipulation des archives SAP qui permet de "
-"réaliser\n"
+"SAPfs est un outil de manipulation des archives SAP qui permet de réaliser\n"
 "sur ces archives les opérations naturelles d'un système de fichiers.\n"
 "\n"
 
 #. version
-#: ../../sapfs.c:726
+#: ../../sapfs.c:728
 #, c-format
 msgid "SAPfs version %s for %s, Copyright (C) 2001-2003 Eric Botcazou.\n"
 msgstr "SAPfs version %s pour %s, copyright (C) 2001-2003 Eric Botcazou\n"
 
-#: ../../sapfs.c:703
+#: ../../sapfs.c:705
 #, c-format
 msgid ""
 "Usage:\n"
@@ -118,8 +117,7 @@ msgid ""
 "\n"
 "  -a, --add           adds one or more files to the SAP archive\n"
 "  -c, --create        creates an empty SAP archive\n"
-"  -d, --delete        deletes one or multiple files from the SAP "
-"archive\n"
+"  -d, --delete        deletes one or multiple files from the SAP archive\n"
 "  -f, --format        formats an SAP archive\n"
 "  -h, --help          shows this help\n"
 "  -i, --info          displays information about a file\n"
@@ -137,12 +135,11 @@ msgstr ""
 "    %s [-hituvwx] archive.sap [fichier...] [piste] [sect]\n"
 "    %s -c | -f archive.sap [nb pistes] [densité]\n"
 "    %s -k archive.sap archive2.sap [piste] [sect]\n"
-"    %s -m archive1.sap track sector archive2.sap piste sect\n"
+"    %s -m archive1.sap piste sect archive2.sap piste sect\n"
 "\n"
 "  -a, --add           ajoute un ou plusieurs fichiers de l'archive SAP\n"
 "  -c, --create        crée une archive SAP vide\n"
-"  -d, --delete        détruit un ou plusieurs fichiers de l'archive "
-"SAP\n"
+"  -d, --delete        détruit un ou plusieurs fichiers de l'archive SAP\n"
 "  -f, --format        formate une archive SAP\n"
 "  -h, --help          affice cette aide\n"
 "  -i, --info          affice les informations relatives à un fichier\n"
@@ -151,53 +148,51 @@ msgstr ""
 "  -t, --list          affiche la liste des fichiers de l'archive SAP\n"
 "  -u, --dump          affice la contenu d'un ou plusieurs secteurs\n"
 "  -v, --version       affice la version du programme\n"
-"  -w, --verify        effectue une vérification d'un ou plusieurs "
-"secteurs\n"
-"  -x, --extract       extrait un ou plusieurs fichiers de l'archive "
-"SAP\n"
+"  -w, --verify        effectue une vérification d'un ou plusieurs secteurs\n"
+"  -x, --extract       extrait un ou plusieurs fichiers de l'archive SAP\n"
 "      --extract-all   extrait tous le fichiers de l'archive SAP\n"
 
-#: ../../sapfs.c:663
+#: ../../sapfs.c:666
 #, c-format
 msgid "Usage: %s -h --help | -v --version | -c --create |  -f --format\n"
 msgstr "Usage: %s -h --help | -v --version | -c --create |  -f --format\n"
 
-#: ../../sapfs.c:365
+#: ../../sapfs.c:368
 #, c-format
 msgid "blocks: "
 msgstr "blocks: "
 
-#: ../../sapfs.c:363
+#: ../../sapfs.c:366
 #, c-format
 msgid "comment: %s\n"
 msgstr "comment: %s\n"
 
-#: ../../sapfs.c:355
+#: ../../sapfs.c:358
 #, c-format
 msgid "data type: %d\n"
 msgstr "data type: %d\n"
 
-#: ../../sapfs.c:359
+#: ../../sapfs.c:362
 #, c-format
 msgid "date: %s\n"
 msgstr "date: %s\n"
 
-#: ../../sapfs.c:354
+#: ../../sapfs.c:357
 #, c-format
 msgid "file type: %d\n"
 msgstr "file type: %d\n"
 
-#: ../../sapfs.c:352
+#: ../../sapfs.c:355
 #, c-format
 msgid "name: %s\n"
 msgstr "name: %s\n"
 
-#: ../../sapfs.c:353
+#: ../../sapfs.c:356
 #, c-format
 msgid "size: %d bytes\n"
 msgstr "size: %d bytes\n"
 
-#: ../../sapfs.c:189
+#: ../../sapfs.c:192
 #, c-format
 msgid "track %d sector %02d: "
-msgstr "track %d sector %02d: "
+msgstr "piste %d secteur %02d: "
