@@ -707,9 +707,11 @@ int main(int argc, char *argv[])
    if (argc < 2) { /* no argument? */
       if (FloppyInit(&fi, 1) > 0) {
          interactive_main();
+         fprintf(stderr, _("*** Error: no floppy disk drives found, aborting ***\n"));
          FloppyExit();
       }
       else {
+         fprintf(stderr, _("*** Error: no floppy disk drives found, aborting ***\n"));
          ret = 1;
       }
    }
@@ -767,6 +769,7 @@ int main(int argc, char *argv[])
                   FloppyExit();
                }
                else {
+                  fprintf(stderr, _("*** Error: no floppy disk drives found, aborting ***\n"));
                   ret = 1;
                }
                break;
@@ -805,6 +808,7 @@ int main(int argc, char *argv[])
                   FloppyExit();
                }
                else {
+                  fprintf(stderr, _("*** Error: no floppy disk drives found, aborting ***\n"));
                   ret = 1;
                }
                break;
@@ -831,6 +835,7 @@ int main(int argc, char *argv[])
                   FloppyExit();
                }
                else {
+                  fprintf(stderr, _("*** Error: no floppy disk drives found, aborting ***\n"));
                   ret = 1;
                }
                break;
@@ -844,6 +849,7 @@ int main(int argc, char *argv[])
                   FloppyExit();
                }
                else {
+                  fprintf(stderr, _("*** Error: no floppy disk drives found, aborting ***\n"));
                   ret = 1;
                }
                break;

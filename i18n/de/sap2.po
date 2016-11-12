@@ -129,7 +129,13 @@ msgstr ""
 msgid "*** Error: SAP archive corrupted ***\n"
 msgstr "*** Fehler: SAP-Archiv beschädigt ***\n"
 
-#: ../../sap2.c:587 ../../sap2.c:601
+#: ../../sap2.c:710 ../../sap2.c:714 ../../sap2.c:770 ../../sap2.c:809
+#: ../../sap2.c:836 ../../sap2.c:850
+#, c-format
+msgid "*** Error: no floppy disk drives found, aborting ***\n"
+msgstr "*** Fehler: keine Diskettenlaufwerke gefunden, beende... ***\n"
+
+#: ../../sap2.c:588 ../../sap2.c:602
 #, c-format
 msgid "*** Error: unable to create the file %s ***\n"
 msgstr "*** Fehler: kann die Datei %s nicht anlegen ***\n"
