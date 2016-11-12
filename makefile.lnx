@@ -5,7 +5,12 @@
 #  clean         : delete all rebuildable files                          #
 ##########################################################################
 
-PREFIX = /usr/local
+PREFIX ?= /usr/local
+
+# PREFIX_MO is the PREFIX for the translations of the user interface
+# Sadly, /usr/local/share/locale is not used, they're only
+# searched in /usr/share/locale
+PREFIX_MO ?= /usr
 
 
 ################
@@ -27,7 +32,7 @@ WFLAGS = -Wall -W -Werror
 
 OFLAGS = -O2 -fomit-frame-pointer -funsigned-char
 
-CFLAGS = $(WFLAGS) $(OFLAGS)
+CFLAGS = $(WFLAGS) $(OFLAGS) -DPREFIX_MO=$(PREFIX_MO)
 
 
 ################
@@ -38,10 +43,10 @@ CFLAGS = $(WFLAGS) $(OFLAGS)
 
 all: sap2 sapfs i18n
 
-install: sap2 sapfs i18n
-	mkdir -p $(PREFIX)/bin
+install:
+	install -d $(PREFIX)/bin
 	install -s sap2 sapfs $(PREFIX)/bin
-	make -C i18n install
+	make -C i18n install PREFIX_MO=$(PREFIX_MO)
 
 clean:
 	rm -f sap2 sapfs $(OBJ_DIR)*.o
@@ -58,4 +63,3 @@ $(OBJ_DIR)%.o: %.c
 
 i18n: $(OBJ_SAP) $(OBJ_SAPFS)
 	make -C i18n
-

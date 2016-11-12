@@ -31,6 +31,8 @@
 #define _(String) gettext (String)
 #define gettext_noop(String) String
 #define N_(String) gettext_noop(String)
+#define Q(x) #x
+#define QUOTE(x) Q(x)
 
 
 #define SAPFS_VERSION_STR "0.9.6"
@@ -678,7 +680,8 @@ int main(int argc, char *argv[])
    char *star = "*";
 
    setlocale(LC_ALL, "");
-   bindtextdomain("sapfs", "/usr/share/locale");
+   if (bindtextdomain("sapfs", QUOTE(PREFIX_MO) "/share/locale") == NULL)
+      fprintf(stderr, "Error: bindtextdomain() failed\n");
    textdomain("sapfs");
 
    if (argc < 2)  /* no argument? */

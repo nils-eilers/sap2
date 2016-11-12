@@ -38,6 +38,8 @@
 #define _(String) gettext (String)
 #define gettext_noop(String) String
 #define N_(String) gettext_noop (String)
+#define Q(x) #x
+#define QUOTE(x) Q(x)
 
 
 #define SAP2_VERSION_STR "2.2.0"
@@ -698,7 +700,8 @@ int main(int argc, char *argv[])
    int i;
 
    setlocale(LC_ALL, "");
-   bindtextdomain("sap2", "/usr/share/locale");
+   if(bindtextdomain("sapfs", QUOTE(PREFIX_MO) "/share/locale") == NULL)
+      fprintf(stderr, "Error: bindtextdomain() failed\n");
    textdomain("sap2");
 
    if (argc < 2) { /* no argument? */

@@ -9,6 +9,7 @@ LANGUAGES=de fr
 
 # -----------------------------------------------------------------------
 
+PREFIX_MO ?= /usr
 
 .PHONY: i18n clean install
 
@@ -19,4 +20,4 @@ clean:
 	for l in $(LANGUAGES); do make -C $$l clean; done
 
 install:
-	for l in $(LANGUAGES); do make -C $$l install; done
+	for l in $(LANGUAGES); do make -C $$l install PREFIX_MO=$(PREFIX_MO); done

@@ -16,10 +16,8 @@ LANGUAGE_SHORTNAME=fr
 PRG:=sap2 sapfs
 MO:=$(addsuffix .mo, $(PRG))
 
-PREFIX ?= /
-# PREFIX ?= /home/j/sap2-goes-here
-
-MODIR ?= usr/share/locale/$(LANGUAGE_SHORTNAME)/LC_MESSAGES
+PREFIX_MO ?= /usr
+MODIR ?= share/locale/$(LANGUAGE_SHORTNAME)/LC_MESSAGES
 
 
 # Keep secondary targets, especially .po files
@@ -54,5 +52,5 @@ veryclean: clean
 	rm -f *.po
 
 install:
-	install -d $(PREFIX)$(MODIR)
-	install  $(MO) $(PREFIX)$(MODIR)
+	install -d $(PREFIX_MO)/$(MODIR)
+	install  -m 644 $(MO) $(PREFIX_MO)/$(MODIR)
