@@ -700,6 +700,7 @@ int main(int argc, char *argv[])
             }
 
             usage(argv[0]);
+            /* fall through */
 
          case 'h':  /* help */
             printf(_("SAPfs is an SAP archive handling tool to perform common file system\n"

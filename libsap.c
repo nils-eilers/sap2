@@ -1273,7 +1273,7 @@ int sap_FillArchive(sapID id, sapsector_t *sapsector)
       case EMPTY_ARCHIVE:
          ID_STATE(id) = FILLED_ARCHIVE;
          sect = 1;
-         /* no break */
+         /* fall through */
 
       case FILLED_ARCHIVE:
          do_write_sector(id, sapsector);

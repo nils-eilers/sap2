@@ -729,6 +729,7 @@ int main(int argc, char *argv[])
                }
 
                usage(argv[0]);
+               /* fall through */
 
             case 'h':  /* help */
                printf(_("SAP2 is a tool to read and write Thomson 3\"5 and 5\"25 floppy disks\n\n"));
